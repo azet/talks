@@ -1,18 +1,10 @@
-%% Author: 	Aaron <azet@azet.org> Zauner
-%% License:	https://creativecommons.org/licenses/by-nc-nd/4.0/
+%% Author:  Aaron <azet@azet.org> Zauner
+%% License: https://creativecommons.org/licenses/by-nc-nd/4.0/
 
 %% theme and colorscheme
 \documentclass[hyperref={draft}]{beamer}
 \usecolortheme[dark,accent=white]{solarized}
 \beamertemplatetransparentcovered
-\setbeamertemplate{navigation symbols}{}
-
-%% footer
-\setbeamertemplate{footline}[text line]{%
-  \parbox{\linewidth}{\vspace*{-15pt}
-		      \insertdate \hfill \inserttitle \newline
-		      \insertshortauthor \hfill \insertframenumber/\inserttotalframenumber
-		     }}
 \setbeamertemplate{navigation symbols}{}
 
 %% packages
@@ -22,6 +14,14 @@
 \usepackage{tikz}
 \usepackage{mathtools}
 \usepackage{appendixnumberbeamer} 
+
+%% footer
+\setbeamertemplate{footline}[text line]{%
+  \parbox{\linewidth}{\vspace*{-15pt}
+          \insertdate \hfill \inserttitle \newline
+          \insertshortauthor \hfill \insertframenumber/\inserttotalframenumber
+         }}
+\setbeamertemplate{navigation symbols}{}
 
 %% title
 \title{There Is No Largest Prime Number}
