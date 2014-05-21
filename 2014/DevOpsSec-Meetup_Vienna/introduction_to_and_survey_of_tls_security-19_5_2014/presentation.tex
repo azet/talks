@@ -85,6 +85,11 @@
 
 \begin{frame}{Motivation}
     \includegraphics[height=180px]{sslpulse}
+
+    \vspace{10px}
+
+    \tiny
+    \url{https://www.trustworthyinternet.org/ssl-pulse}
 \end{frame}
 
 
@@ -116,7 +121,7 @@
 \end{frame}
 
 \begin{frame}{Background}
-  \framesubtitle{Confidentiality}
+  \framesubtitle{Confidentiallity}
   \begin{itemize}
     \item Prevent unauthorized disclosure of information
     \item \emph{Encryption} and \emph{Decryption} of confidential data
@@ -129,7 +134,7 @@
 \end{frame}
 
 \begin{frame}{Background}
-  \framesubtitle{Confidentiality: Block cipher modes}
+  \framesubtitle{Confidentiallity: Block cipher modes}
   Block ciphers operate on fixed size \emph{blocks of data}.\\
   Online communication is defined by \emph{streams of data}.
   \newline
@@ -146,7 +151,7 @@
 \end{frame}
 
 \begin{frame}{Background}
-  \framesubtitle{Confidentiality: Block cipher modes}
+  \framesubtitle{Confidentiallity: Block cipher modes}
   \begin{itemize}
     \item CBC Mode (sequential):\\
     \includegraphics[height=80px]{CBC_encryption}\\
@@ -155,7 +160,7 @@
 \end{frame}
 
 \begin{frame}{Background}
-  \framesubtitle{Confidentiality: Block cipher modes}
+  \framesubtitle{Confidentiallity: Block cipher modes}
   \begin{itemize}
     \item CTR Mode (parallel):\\
     \includegraphics[height=80px]{CTR_encryption}\\
@@ -167,7 +172,7 @@
   \framesubtitle{Integrity}
   \begin{itemize}
     \item Assures consistency of data
-    \item e.g. tempered data will be detected (and may be discarded)
+    \item e.g. tampered data will be detected (and may be discarded)
     \item Cryptographic hash functions like SHA can provide integrity by acting as a Hash based Message Authentication Code (HMAC) on the message to be sent and recieved
     \item Hash-functions need to be collission-resistant: Two different inputs should never produce the same hash!
     \item Ideally messages should be encrypted first then MACed (encrypt-then-mac, ETM) to prevent against attacks (CCA, CPA) and to provide for integrity of ciphertexts and plaintexts.\\
@@ -334,7 +339,7 @@
   Forward secrecy (aka Perfect Forward Secrecy - PFS) ensures that only ephemeral session keys are used.
   \newline
   \newline
-  Even if a key is compromised in the future, not all communiction that may have been recorded is compromised.
+  Even if a key is compromised in the future, not all communication that may have been recorded is compromised.
   \newline
   \newline
   Simple, at the end of a session:
@@ -460,7 +465,7 @@
     \item An ``abbreviated handshake'' is used
     \item Previously negotiated Handshake parameters are reused
   \end{itemize}
-  False-start (somewhat depreciated):
+  False-start (somewhat deprecated):
   \begin{itemize}
     \item Optional extension to send data before the Handshake is completed
     \item After ChangeCipherSpec and Finished messages Client or Server data may be sent
@@ -491,7 +496,7 @@
   HTTP Strict Transport Security (HSTS) is a security policy that enforces HTTPS connections on following requests (e.g. upgrade every HTTP requests to HTTPS).
   \newline
   \newline
-  A small downside: the first HSTS header must be sent over HTTPS to ensure it cannot be tempered with.
+  A small downside: the first HSTS header must be sent over HTTPS to ensure it cannot be tampered with.
   \newline
   \newline
   Effectively disables ssl-stripping attacks.
@@ -515,7 +520,7 @@
   X.509, and Web-of-(mis)trust and ASN.1 would require a two hour talk on their own.
   \newline
   \newline
-  Certificate Authorities should and can not be trusted, they are known to behave maliciously at times, give away sub-CAs for DPI to large companies and nations and regularily fuck up their own security processes.
+  Certificate Authorities should and can not be trusted, they are known to behave maliciously at times, give away sub-CAs for DPI to large companies and nations and regularly fuck up their own security processes.
   \newline
   \newline
   Read for example: \url{http://www.certificate-transparency.org/what-is-ct}
@@ -545,7 +550,7 @@
 \begin{frame}{History \& Attacks}
   \framesubtitle{Internet Dark Ages}
   \begin{itemize}
-    \item SSLv2 was fundamentally broken and badly designed. Basically full loss of confidentiality and integrity of on-wire data thus susceptible to MITM attacks, see: \url{http://osvdb.org/56387}
+    \item SSLv2 was fundamentally broken and badly designed. Basically full loss of Confidentiallity and integrity of on-wire data thus susceptible to MITM attacks, see: \url{http://osvdb.org/56387}
     \item CipherSpec is sent in the clear
     \item Size of Block-cipher padding is sent in the clear
   \end{itemize}
@@ -562,7 +567,7 @@
   \framesubtitle{Internet Dark Ages}
   On a side note; back then the choice algorithms was limited and export ciphers (low security) common as recommended by NSA and mandated by US law. Google: ``Bernstein vs. United States''
   \begin{itemize}
-    \item encryption algorithms (confidentiality): NULL, FORTEZZA-CBC (NSA), IDEA-CBC, RC2-CBC-40 (40bit security), RC4-128, DES40-CBC (40bit security), DES-CBC (56bit security), Triple-DES-EDE-CBC
+    \item encryption algorithms (Confidentiality): NULL, FORTEZZA-CBC (NSA), IDEA-CBC, RC2-CBC-40 (40bit security), RC4-128, DES40-CBC (40bit security), DES-CBC (56bit security), Triple-DES-EDE-CBC
     \item hash functions (integrity): NULL, MD5 and SHA
   \end{itemize}
 \end{frame}
@@ -642,7 +647,7 @@ Applications to SSL, IPSEC, WTLS...''
   2003. Canvel, Hiltgen, Vaudenay, Vuagnoux publish ``Password Interception in a SSL/TLS Channel''.
   \newline
   \newline
-  Extend earlier work of Vaudenay and succsessfully intercept IMAP passwords in TLS channels.
+  Extend earlier work of Vaudenay and successfully intercept IMAP passwords in TLS channels.
 
   \vspace{95px}
 
@@ -700,7 +705,7 @@ Applications to SSL, IPSEC, WTLS...''
   2008. Sotirov, Stevens, Appelbaum, Lenstra, Molnar, Osvik and de Weger present a paper based on earlier work by Lenstra et al. at 25c3 entitled ``MD5 considered harmful today''
 
   \begin{itemize}
-    \item MD5 Hash-collission of a CA Certificate
+    \item MD5 Hash-collision of a CA Certificate
     \item Create colliding (rouge) CA Certificates
     \item Generate any Certificate for MITM you want
   \end{itemize}
@@ -721,7 +726,7 @@ Applications to SSL, IPSEC, WTLS...''
     \item Attacker intercepts session via MITM
     \item Attacker sends HTTP 301 (moved permanently)
     \item Attacker forwards requests to/from server via SSL/TLS
-    \item Client recieves data via unencrypted channel
+    \item Client receives data via unencrypted channel
     \item Attacker reads plaintext
   \end{itemize}
   
@@ -756,7 +761,7 @@ Applications to SSL, IPSEC, WTLS...''
 
 \begin{frame}{History \& Attacks}
   \framesubtitle{SSLv2 Forbidden}
-  2011. IETF publishes and standardized a RFC to prohibit negotiation and thus compatability of SSLv2 in TLS1.0-1.2 entirely. 
+  2011. IETF publishes and standardized a RFC to prohibit negotiation and thus compatibility of SSLv2 in TLS1.0-1.2 entirely. 
   
   \vspace{140px}
 
@@ -1021,13 +1026,13 @@ Applications to SSL, IPSEC, WTLS...''
   \url{http://heartbleed.com}
 \end{frame}
 
-\section{Migitation}
+\section{Mitigation}
 
-\begin{frame}{Migitation}
+\begin{frame}{Mitigation}
   \framesubtitle{Get informed!}
-  Luckily migitation does not require as much slides. Because it's rather simple:
+  Luckily Mitigation does not require as much slides. Because it's rather simple:
   \begin{itemize}
-    \item Use current software and update regularily:\\
+    \item Use current software and update regularly:\\
       Most of these attacks are fixed upstream
     \item Use peer-reviewed and solid configurations:\\
       Check out \url{https://bettercrypto.org}
@@ -1037,7 +1042,7 @@ Applications to SSL, IPSEC, WTLS...''
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Migitation}
+\begin{frame}{Mitigation}
   \framesubtitle{Future work}
   IETF TLS-WG is currently working on TLS 1.3 to mitigate some of the issues and concerns raised. 
   \newline
@@ -1056,7 +1061,7 @@ Applications to SSL, IPSEC, WTLS...''
   \url{https://datatracker.ietf.org/doc/draft-gillmor-tls-negotiated-dl-dhe/?include_text=1}\\
 \end{frame}
 
-\begin{frame}{Migitation}
+\begin{frame}{Mitigation}
   \framesubtitle{Distribute Trust}
   Certificate Transparency, TACK and HTKP are only a few examples of proposed solutions to tackle the issue of malicious certificate authorities, certificate forgery and MITM attacks.
 
@@ -1077,10 +1082,11 @@ Applications to SSL, IPSEC, WTLS...''
 \begin{frame}{Conclusion}
   \begin{itemize}
     \item ``Trust the Math'' (Schneier)
-    \item Implementations are a big issue
+    \item Implementation is still a big issue
+    \item Software bugs are a big issue
     \item Protocol design is hard and longsome
-    \item We're going to see much more attacks on TLS
-    \item But we're getting there!
+    \item We're going to see many more attacks on TLS
+    \item TLS and Crypto improvements are being constantly worked on
   \end{itemize} 
 \end{frame}
 
