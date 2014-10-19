@@ -3,7 +3,7 @@
 
 %% theme and colorscheme
 \documentclass[hyperref={draft}]{beamer}
-\usecolortheme[dark,accent=white]{solarized}
+\usecolortheme[dark,accent=white]{modifiedsolarized}
 \beamertemplatetransparentcovered
 \setbeamertemplate{navigation symbols}{}
 
@@ -13,7 +13,7 @@
 \usepackage{textpos}
 \usepackage{tikz}
 \usepackage{mathtools}
-\usepackage{appendixnumberbeamer} 
+\usepackage{appendixnumberbeamer}
 
 %% footer
 \setbeamertemplate{footline}[text line]{%
@@ -41,8 +41,22 @@
 %% main
 \begin{document}
 
+% enables straight single quote
+\makeatletter
+\let \@sverbatim \@verbatim
+\def \@verbatim {\@sverbatim \verbatimplus}
+{\catcode`'=13 \gdef \verbatimplus{\catcode`'=13 \chardef '=13 }} 
+\makeatother
+
+% enables backticks in verbatim
+\makeatletter
+{\catcode`\`=13
+\xdef\@verbatim{\unexpanded\expandafter{\@verbatim}\chardef\noexpand`=18 }
+}
+\makeatother
+
 {
-\setbeamertemplate{footline}{} 
+\setbeamertemplate{footline}{}
 
 \begin{frame}
   \titlepage
@@ -71,33 +85,14 @@
 }
 
 
-\section{Results}
-\subsection{Proof of the Main Theorem}
+\IfFileExists{contentgenerated.tex}{\input{"contentgenerated.tex"}}{\input{"content.tex"}}
 
-\begin{frame}<1>
-  \frametitle{There Is No Largest Prime Number}
-  \framesubtitle{The proof uses \textit{reductio ad absurdum}.}
-
-  \begin{theorem}
-    There is no largest prime number.
-  \end{theorem}
-  \begin{proof}
-    \begin{enumerate}
-      % The strange way of typesetting math is to minimize font usage
-      % in order to keep the file sizes of the examples small.
-    \item<1-| alert@1> Suppose $p$ were the largest prime number.
-    \item<2-> Let $q$ be the product of the first $p$ numbers.
-    \item<3-> Then $q$\;+\,$1$ is not divisible by any of them.
-    \item<1-> Thus $q$\;+\,$1$ is also prime and greater than $p$.\qedhere
-    \end{enumerate}
-  \end{proof}
-\end{frame}
 
 %% appendix
-\appendix
-\begin{frame}{Bonus Slides}
-blablabla
-\end{frame}
+%\appendix
+%\begin{frame}{Bonus Slides}
+%blablabla
+%\end{frame}
 
 
 \end{document}
