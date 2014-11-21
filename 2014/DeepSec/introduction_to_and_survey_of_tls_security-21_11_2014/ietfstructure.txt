@@ -1,0 +1,13 @@
+            Internet Society
+                    |
+         Internet Architecture Board
+          |                   |
+         IETF (1)            IRTF (2)
+          |                   |
+    Steering Group       Steering Group
+    |    |    |          |    |     |
+    WG   WG   WG..       WG   WG    WG..
+
+
+1 - Internet Engineering Task Force
+2 - Internet Research Task Force

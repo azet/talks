@@ -1,0 +1,15 @@
+
+  [Client]                             [Server]
+
+
+ClientHello            -------->
+                                      ServerHello
+                                      Certificate*
+                                      ServerKeyExchange*
+                                      CertificateRequest*
+                       <--------      ServerHelloDone
+Certificate*
+ClientKeyExchange
+CertificateVerify*
+[ChangeCipherSpec]
+Finished               -------->

@@ -1,0 +1,10 @@
+
+  [Client]                             [Server]
+
+
+ClientHello            -------->
+                                      ServerHello
+                                      Certificate*
+                                      ServerKeyExchange*
+                                      CertificateRequest*
+                       <--------      ServerHelloDone
