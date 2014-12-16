@@ -69,7 +69,7 @@ in bash.
   `$(util1 $(util2 ${some_variable_as_argument}))`.
 * manual argument parsing instead of using the `getopts` builtin.
 * using `awk` for arithmetic operations bash can do very well.    
-  .. same goes for `expr(1)`. please top using it in bash scripts.    
+  .. same goes for `expr(1)`. please stop using it in bash scripts.    
   .. same goes for `bc(1)`. please stop using it in bash scripts.
 
 ## Common bad style practices (cont.)
@@ -188,7 +188,7 @@ et cetera
 ## Defensive Bash programming (cont.)
 ```
 function linux_distro() {
-  local releasefile=$(cat /etc/*release* &> /dev/null)
+  local releasefile=$(cat /etc/*release* 2> /dev/null)
   case ${releasefile} in
   *Debian*)             printf "debian\n" ;;
   *Suse*)               printf "sles\n"   ;;
@@ -282,5 +282,6 @@ script unfortunately:
   Bashisms, tricks or find any cool projects.
 * Any input is very much appreciated!
 
-\huge \url{https://github.com/azet/community_bash_style_guide}
+### Fork and open Pull Requests, Issues or Complaints! 
+\url{https://github.com/azet/community_bash_style_guide}
 

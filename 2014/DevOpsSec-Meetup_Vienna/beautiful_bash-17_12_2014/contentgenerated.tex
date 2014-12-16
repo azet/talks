@@ -117,7 +117,7 @@ reimplemented in bash.
   manual argument parsing instead of using the \texttt{getopts} builtin.
 \item
   using \texttt{awk} for arithmetic operations bash can do very well.\\
-  .. same goes for \texttt{expr(1)}. please top using it in bash
+  .. same goes for \texttt{expr(1)}. please stop using it in bash
   scripts.\\ .. same goes for \texttt{bc(1)}. please stop using it in
   bash scripts.
 \end{itemize}
@@ -312,7 +312,7 @@ et cetera
 
 \begin{verbatim}
 function linux_distro() {
-  local releasefile=$(cat /etc/*release* &> /dev/null)
+  local releasefile=$(cat /etc/*release* 2> /dev/null)
   case ${releasefile} in
   *Debian*)             printf "debian\n" ;;
   *Suse*)               printf "sles\n"   ;;
@@ -443,6 +443,10 @@ script unfortunately:
   Any input is very much appreciated!
 \end{itemize}
 
-\huge \url{https://github.com/azet/community_bash_style_guide}
+\begin{block}{Fork and open Pull Requests, Issues or Complaints!}
+
+\url{https://github.com/azet/community_bash_style_guide}
+
+\end{block}
 
 \end{frame}
