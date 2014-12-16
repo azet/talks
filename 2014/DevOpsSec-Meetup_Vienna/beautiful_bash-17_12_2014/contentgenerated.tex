@@ -168,6 +168,25 @@ ls ${long_list_of_parameters}   \
 
 \end{frame}
 
+\begin{frame}[fragile]{\texttt{awk(1)} for everything}
+
+But why?
+
+\begin{verbatim}
+$ du -sh Downloads | awk '{ print $1 }'
+366G
+\end{verbatim}
+
+\begin{verbatim}
+$ folder_size=($(du -sh Downloads))
+$ echo ${folder_size[1]}
+Downloads
+$ echo ${folder_size[0]}
+366G
+\end{verbatim}
+
+\end{frame}
+
 \begin{frame}{}
 
 \end{frame}
@@ -194,6 +213,30 @@ available also to Bash.
 \vfill
 Let's not kid ourselves: some Bash scripts will run in production, even
 for years. They'd better work. And not take your business offline.
+
+\end{frame}
+
+\begin{frame}{DocOpt}
+
+DocOpt is a Command-line interface description language with support for
+all popular programming languages.
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  \url{http://docopt.org/}
+\item
+  \url{https://github.com/docopt}
+\end{itemize}
+
+\vfill
+..also for Bash
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  \url{https://github.com/docopt/docopts}
+\end{itemize}
 
 \end{frame}
 
@@ -448,5 +491,46 @@ script unfortunately:
 \url{https://github.com/azet/community_bash_style_guide}
 
 \end{block}
+
+\end{frame}
+
+\begin{frame}{Trivia: \textbf{Do not try this at home}}
+
+\vfill
+OOP in Bash:
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  \url{https://github.com/tomas/skull}
+\item
+  \url{https://github.com/kristopolous/TickTick}
+\item
+  \url{https://code.google.com/p/object-oriented-bash/}
+\item
+  \url{https://github.com/patrickd-/ooengine}
+\item
+  \url{http://hipersayanx.blogspot.co.at/2012/12/object-oriented-programming-in-bash.html}
+\end{itemize}
+
+\vfill
+LISP Dialect implemented in Bash:
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  \url{https://github.com/alandipert/gherkin}
+\end{itemize}
+
+\vfill
+
+The original Macros used in the source of Bourne Shell (To make it look
+like ALGOL68 - the author was a big fan):
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  \url{http://research.swtch.com/shmacro}
+\end{itemize}
 
 \end{frame}

@@ -104,6 +104,22 @@ ls ${long_list_of_parameters}   \
     | uniq
 ```
 
+## `awk(1)` for everything
+But why?
+
+```
+$ du -sh Downloads | awk '{ print $1 }'
+366G
+```
+
+```
+$ folder_size=($(du -sh Downloads))
+$ echo ${folder_size[1]}
+Downloads
+$ echo ${folder_size[0]}
+366G
+```
+
 ##
 
 ## Debugging is a mess
@@ -125,6 +141,18 @@ available also to Bash.
 \vfill
 Let's not kid ourselves: some Bash scripts will run in production, even
 for years. They'd better work. And not take your business offline.
+
+## DocOpt
+DocOpt is a Command-line interface description language with support for
+all popular programming languages.
+
+* \url{http://docopt.org/}
+* \url{https://github.com/docopt}
+
+\vfill
+..also for Bash
+
+* \url{https://github.com/docopt/docopts}
 
 ## Test Driven Development and Unit tests with Bash
 1. Sam Stephenson (of `rbenv` fame) wrote an automated testing
@@ -271,7 +299,6 @@ script unfortunately:
 * that being said, someone wrote a Bash debugger with `gdb` command
   syntax: \url{http://bashdb.sourceforge.net/}
 
-
 # Conclusion
 ## Conclusion
 * There's a lot more to tell (just ask me afterwards) - but this was
@@ -284,4 +311,27 @@ script unfortunately:
 
 ### Fork and open Pull Requests, Issues or Complaints! 
 \url{https://github.com/azet/community_bash_style_guide}
+
+## Trivia: **Do not try this at home**
+\vfill
+OOP in Bash: 
+
+* \url{https://github.com/tomas/skull}
+* \url{https://github.com/kristopolous/TickTick}
+* \url{https://code.google.com/p/object-oriented-bash/}
+* \url{https://github.com/patrickd-/ooengine}
+* \url{http://hipersayanx.blogspot.co.at/2012/12/object-oriented-programming-in-bash.html}
+
+\vfill
+LISP Dialect implemented in Bash:
+
+* \url{https://github.com/alandipert/gherkin}
+
+\vfill
+
+The original Macros used in the source of Bourne Shell (To make it look
+like ALGOL68 - the author was a big fan):
+
+* \url{http://research.swtch.com/shmacro}
+
 
