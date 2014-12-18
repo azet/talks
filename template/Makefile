@@ -21,3 +21,6 @@ clean-pdf:
 clean-generated:
 	$(RM) *generated*
 
+public: clean
+	test $(git status) || printf "\n\nATTENTION:\tnot in git yet!\n\n\n" && exit 1
+	git push
