@@ -142,6 +142,25 @@ available also to Bash.
 Let's not kid ourselves: some Bash scripts will run in production, even
 for years. They'd better work. And not take your business offline.
 
+
+## Conventions
+I've come up with a few conventions:
+
+* use `#!/usr/bin/env bash`
+* do **not** use TABs for (consistently use 2, 3 or 4 spaces)
+* but conditional and loop clauses on the same line:     
+  `if ..; then` instead of    
+```
+    if ...
+    then
+      ...
+    fi
+```
+* there're no private functions in Bash, RedHat has a convention for
+  that, prepend with two underscores `function __my_private_function()`
+* as in Ruby, Python; don't use indents in switch (case) blocks
+* always "escape" varabiles. Bad: `$MyVar`, Good: `${MyVar}`.
+
 ## DocOpt
 DocOpt is a Command-line interface description language with support for
 all popular programming languages.
@@ -155,6 +174,23 @@ all popular programming languages.
 * \url{https://github.com/docopt/docopts}
 
 ## Test Driven Development and Unit tests with Bash
+```
+#!/usr/bin/env bats
+
+@test "addition using bc" {
+  result="$(echo 2+2 | bc)"
+  [ "$result" -eq 4 ]
+}
+
+@test "addition using dc" {
+  result="$(echo 2 2+p | dc)"
+  [ "$result" -eq 4 ]
+}
+```
+...
+
+## Test Driven Development and Unit tests with Bash (cont.)
+
 1. Sam Stephenson (of `rbenv` fame) wrote an automated testing
   system for Bash scripts called 'bats' using TAP (Test Anything Protocol): 
   \url{https://github.com/sstephenson/bats}

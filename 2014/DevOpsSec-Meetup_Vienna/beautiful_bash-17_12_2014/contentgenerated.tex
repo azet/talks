@@ -216,6 +216,38 @@ for years. They'd better work. And not take your business offline.
 
 \end{frame}
 
+\begin{frame}[fragile]{Conventions}
+
+I've come up with a few conventions:
+
+\begin{itemize}
+\item
+  use \texttt{\#!/usr/bin/env bash}
+\item
+  do \textbf{not} use TABs for (consistently use 2, 3 or 4 spaces)
+\item
+  but conditional and loop clauses on the same line:\\
+  \texttt{if ..; then} instead of
+
+\begin{verbatim}
+if ...
+then
+  ...
+fi
+\end{verbatim}
+\item
+  there're no private functions in Bash, RedHat has a convention for
+  that, prepend with two underscores
+  \texttt{function \_\_my\_private\_function()}
+\item
+  as in Ruby, Python; don't use indents in switch (case) blocks
+\item
+  always ``escape'' varabiles. Bad: \texttt{\$MyVar}, Good:
+  \texttt{\$\{MyVar\}}.
+\end{itemize}
+
+\end{frame}
+
 \begin{frame}{DocOpt}
 
 DocOpt is a Command-line interface description language with support for
@@ -240,7 +272,27 @@ all popular programming languages.
 
 \end{frame}
 
-\begin{frame}{Test Driven Development and Unit tests with Bash}
+\begin{frame}[fragile]{Test Driven Development and Unit tests with Bash}
+
+\begin{verbatim}
+#!/usr/bin/env bats
+
+@test "addition using bc" {
+  result="$(echo 2+2 | bc)"
+  [ "$result" -eq 4 ]
+}
+
+@test "addition using dc" {
+  result="$(echo 2 2+p | dc)"
+  [ "$result" -eq 4 ]
+}
+\end{verbatim}
+
+\ldots{}
+
+\end{frame}
+
+\begin{frame}{Test Driven Development and Unit tests with Bash (cont.)}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
