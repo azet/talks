@@ -6,9 +6,9 @@ TEX_SUFS := .aux .log .nav .out .snm .toc .vrb .fdb_latexmk .fls
 
 all: $(TALK)
 genocide: clean clean-pdf clean-generated
-markdown: pandoc $(TALK)
+markdown: pandoc-markdown $(TALK)
 
-pandoc:
+pandoc-markdown:
 	pandoc content.md --slide-level 2 -t beamer -o contentgenerated.tex
 
 clean:
@@ -21,3 +21,5 @@ clean-pdf:
 clean-generated:
 	$(RM) *generated*
 
+public: clean
+	git push
