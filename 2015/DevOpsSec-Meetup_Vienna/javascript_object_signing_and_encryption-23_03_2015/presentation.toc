@@ -1,7 +1,0 @@
-\beamer@endinputifotherversion {3.26pt}
-\beamer@sectionintoc {1}{Javascript Object Signing \& Encryption}{3}{0}{1}
-\beamer@sectionintoc {2}{JWK: JSON Web Key}{5}{0}{2}
-\beamer@sectionintoc {3}{JWS: JSON Web Signature}{10}{0}{3}
-\beamer@sectionintoc {4}{JWE: JSON Web Encryption}{17}{0}{4}
-\beamer@sectionintoc {5}{JWA: JSON Web Algorithms}{20}{0}{5}
-\beamer@sectionintoc {6}{Examples}{21}{0}{6}
