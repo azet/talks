@@ -1,10 +1,19 @@
 # Javascript Object Signing & Encryption
 ## JOSE
-### Definition
-*JOSE is a framework intended to provide a method to securely
-transfer claims (such as authorization information) between parties. The
-JOSE framework provides a collection of specifications to serve this
-purpose. [...]*
+### Working Group
+*With the increased usage of JSON in protocols in the IETF and
+elsewhere, there is now a desire to offer security services, which use
+encryption, digital signatures, message authentication codes (MACs)
+algorithms, that carry their data in JSON format.*
+
+[...]
+
+*This Working Group will standardize the
+mechanism for integrity protection (signature and MAC) and encryption as
+well as the format for keys and algorithm identifiers to support
+interoperability of security services for protocols that use JSON.*
+
+https://datatracker.ietf.org/wg/jose/charter/
 
 ## JOSE
 Couple of new IETF standards being worked on to provide a framework for
@@ -20,7 +29,6 @@ signatures and/or encryption of JSON data:
 * End-to-end (E2E)
 * **Not** a replacement for TLS!
 
-# JWK: JSON Web Key
 ## JWK: JSON Web Key
 * Datastructures to represent cryptographic keys
 * Used for JWS and JWE
@@ -106,7 +114,6 @@ Set of Symmetric Encryption Keys (AES key wrap and HMAC):
  }
 ```
 
-# JWS: JSON Web Signature
 ## JWS: JSON Web Signature
 
 Content signed with:
@@ -230,7 +237,6 @@ Header Parameters
 * **cty**: Content Type
 * **crit**: "Critical" specifies fields that MUST be protected
 
-# JWE: JSON Web Encryption
 ## JWE: JSON Web Encryption
 
 Format is very similar to JWS, but used for encryption of data
@@ -287,7 +293,6 @@ Example (flattened JSON representation):
 }
 ```
 
-# JWA: JSON Web Algorithms
 ## JWA: JSON Web Algorithms
 
 * JWA Specifies a list of crypto primitives (algorithms) to be used in conjunction
