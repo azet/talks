@@ -1,0 +1,6 @@
+\beamer@slide {javascript-object-signing-encryption}{3}
+\beamer@slide {jwk-json-web-key}{5}
+\beamer@slide {jws-json-web-signature}{10}
+\beamer@slide {jwe-json-web-encryption}{17}
+\beamer@slide {jwa-json-web-algorithms}{20}
+\beamer@slide {examples}{21}

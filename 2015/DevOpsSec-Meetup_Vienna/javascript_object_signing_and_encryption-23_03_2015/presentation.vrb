@@ -1,0 +1,25 @@
+\frametitle{Running Code}
+
+Implementations in all popular languages are available on GitHub!
+
+\begin{block}{Python}
+
+\small
+
+\begin{verbatim}
+import jose
+
+claims = {
+    "iss": "http://www.example.com",
+    "exp": int(time()) + 3600,
+    "sub": 42,
+}
+
+jwk = {"k": "password"}
+jws = jose.sign(claims, jwk, alg="HS256")
+\end{verbatim}
+
+http://jose.readthedocs.org/en/latest/
+
+\end{block}
+
