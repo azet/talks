@@ -1,0 +1,547 @@
+\section{Javascript Object Signing \&
+Encryption}\label{javascript-object-signing-encryption}
+
+\begin{frame}{JOSE}
+
+\begin{block}{Working Group}
+
+\emph{With the increased usage of JSON in protocols in the IETF and
+elsewhere, there is now a desire to offer security services, which use
+encryption, digital signatures, message authentication codes (MACs)
+algorithms, that carry their data in JSON format.}
+
+{[}\ldots{}{]}
+
+\emph{This Working Group will standardize the mechanism for integrity
+protection (signature and MAC) and encryption as well as the format for
+keys and algorithm identifiers to support interoperability of security
+services for protocols that use JSON.}
+
+https://datatracker.ietf.org/wg/jose/charter/
+
+\end{block}
+
+\end{frame}
+
+\begin{frame}{JOSE}
+
+Couple of new IETF standards being worked on to provide a framework for
+signatures and/or encryption of JSON data:
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  JSON Web Key ``JWK''
+\item
+  JSON Web Signature ``JWS''
+\item
+  JSON Web Encryption ``JWE''
+\item
+  (Algorithms defined in JSON Web Algorithms ``JWA'')
+\end{itemize}
+
+..it is..
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  End-to-end (E2E)
+\item
+  \textbf{Not} a replacement for TLS!
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{JWK: JSON Web Key}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Datastructures to represent cryptographic keys
+\item
+  Used for JWS and JWE
+\item
+  Keys and Key-Sets
+\end{itemize}
+
+https://tools.ietf.org/html/draft-ietf-jose-json-web-key
+
+\end{frame}
+
+\begin{frame}[fragile]{JWK: Key}
+
+\begin{verbatim}
+{"kty":"EC",
+      "crv":"P-256",
+      "x":"f83OJ3D2xF1Bg8vub9tLe1gHMzV76e8Tus9uPHvRVEU",
+      "y":"x_FEzRu9m36HLN_tue659LNpXW6pCyStikYjKIWI5a0",
+      "kid":"Public key used in JWS A.3 example"
+}
+\end{verbatim}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Key Type: \textbf{EC} (Elliptic Curve, Digital Signature Standard)
+\item
+  Curve: NIST \textbf{P-256}
+\item
+  Curve Points \(x\) and \(y\)
+\item
+  A Key Identifier \textbf{kid}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{JWK: Key}
+
+Other parameters that can be assigned include:
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  \textbf{use}: Public Key Use (\textbf{sig} or \textbf{enc})
+\item
+  \textbf{key\_ops}: allowed operations (sign, verify, enc, dec, et
+  cetera)
+\item
+  \textbf{alg}: Intended Algorithm to be used with this Key
+\item
+  \textbf{x5u}: X.509 URL parameter (certificate resource)
+\item
+  \textbf{x5c}: X.509 Certificate Chain
+\item
+  \textbf{x5t} and \textbf{x5t\#S256}: X.509 SHA-1 and SHA-2 Thumbprints
+\end{itemize}
+
+..might sound familiar to X.509 certificate extensions.
+
+\end{frame}
+
+\begin{frame}[fragile]{JWK: JWK Set (Key Set)}
+
+ECC and RSA Public Keys:
+
+\tiny
+
+\begin{verbatim}
+ {"keys":
+   [
+     {"kty":"EC",
+      "crv":"P-256",
+      "x":"MKBCTNIcKUSDii11ySs3526iDZ8AiTo7Tu6KPAqv7D4",
+      "y":"4Etl6SRW2YiLUrN5vfvVHuhp7x8PxltmWWlbbM4IFyM",
+      "use":"enc",
+      "kid":"1"},
+
+     {"kty":"RSA",
+      "n": "0vx7agoebGcQSuuPiLJXZptN9nndrQmbXEps2aiAFbWhM78LhWx
+ 4cbbfAAtVT86zwu1RK7aPFFxuhDR1L6tSoc_BJECPebWKRXjBZCiFV4n3oknjhMs
+ tn64tZ_2W-5JsGY4Hc5n9yBXArwl93lqt7_RN5w6Cf0h4QyQ5v-65YGjQR0_FDW2
+ QvzqY368QQMicAtaSqzs8KJZgnYb9c7d0zgdAZHzu6qMQvRL5hajrn1n91CbOpbI
+ SD08qNLyrdkt-bFTWhAI4vMQFh6WeZu0fM4lFd2NcRwr3XPksINHaQ-G_xBniIqb
+ w0Ls1jF44-csFCur-kEgU8awapJzKnqDKgw",
+      "e":"AQAB",
+      "alg":"RS256",
+      "kid":"2011-04-29"}
+   ]
+ }
+\end{verbatim}
+
+\end{frame}
+
+\begin{frame}[fragile]{JWK: JWK Set (Key Set)}
+
+Set of Symmetric Encryption Keys (AES key wrap and HMAC):
+
+\small
+
+\begin{verbatim}
+ {"keys":
+   [
+     {"kty":"oct",
+      "alg":"A128KW",
+      "k":"GawgguFyGrWKav7AX4VKUg"},
+
+     {"kty":"oct",
+      "k":"AyM1SysPpbyDfgZld3umj1qzKObwVMkoqQ-EstJQLr_T-
+   1qS0gZH75aKtMN3Yj0iPS4hcgUuTwjAzZr1Z9CAow",
+      "kid":"HMAC key used in JWS A.1 example"}
+   ]
+ }
+\end{verbatim}
+
+\end{frame}
+
+\begin{frame}{JWS: JSON Web Signature}
+
+Content signed with:
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Digital Signature .. or;
+\item
+  Message Authentication Code (MAC)
+\end{itemize}
+
+..thus provides integrity protection.
+
+https://tools.ietf.org/html/draft-ietf-jose-json-web-signature
+
+\end{frame}
+
+\begin{frame}{JWS: JSON Web Signature}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  JOSE Header (JWS Protected and Unprotected Headers)
+\item
+  JWS Payload
+\item
+  JWS Signature
+\end{itemize}
+
+two serialization formats:
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  `compact': URL-safe (HTTP Auth, URI)
+\item
+  JWS JSON - JSON Objects (values BASE64URL encoded)
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{JWS: JSON Web Signature}
+
+Compact:
+
+\small
+
+\begin{verbatim}
+BASE64URL(UTF8(JWS Protected Header)) || '.' ||
+BASE64URL(JWS Payload) || '.' ||
+BASE64URL(JWS Signature)
+\end{verbatim}
+
+JSON:
+
+\small
+
+\begin{verbatim}
+ {
+  "payload":"<payload contents>",
+  "signatures":[
+   {"protected":"<integrity-protected header 1 contents>",
+    "header":<non-integrity-protected header 1 contents>,
+    "signature":"<signature 1 contents>"},
+   ...
+   {"protected":"<integrity-protected header N contents>",
+    "header":<non-integrity-protected header N contents>,
+    "signature":"<signature N contents>"}]
+ }
+\end{verbatim}
+
+\end{frame}
+
+\begin{frame}[fragile]{JWS: JSON Web Signature}
+
+JSON Web Token Example
+
+\begin{block}{Header}
+
+\emph{Object:}
+
+\begin{verbatim}
+{"typ":"JWT",
+  "alg":"HS256"}
+\end{verbatim}
+
+\emph{Encoded:}
+
+\begin{verbatim}
+eyJ0eXAiOiJKV1QiLA0KICJhbGciOiJIUzI1NiJ9
+\end{verbatim}
+
+\end{block}
+
+\end{frame}
+
+\begin{frame}[fragile]{JWS: JSON Web Signature}
+
+JSON Web Token Example
+
+\begin{block}{Payload}
+
+\emph{Object:}
+
+\begin{verbatim}
+ {"iss":"joe",
+      "exp":1300819380,
+      "http://example.com/is_root":true}
+\end{verbatim}
+
+\emph{Encoded:}
+
+\begin{verbatim}
+eyJpc3MiOiJqb2UiLA0KICJleHAiOjEzMDA4MTkzODAsDQo
+gImh0dHA6Ly9leGFtcGxlLmNvbS9pc19yb290Ijp0cnVlfQ
+\end{verbatim}
+
+\end{block}
+
+\end{frame}
+
+\begin{frame}[fragile]{JWS: JSON Web Signature}
+
+JSON Web Token Example
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Header
+\item
+  Payload
+\item
+  Signature
+\item
+  ..seperated by a dot (.)
+\end{itemize}
+
+Encoded:
+
+\small
+
+\begin{verbatim}
+eyJ0eXAiOiJKV1QiLA0KICJhbGciOiJIUzI1NiJ9
+.
+eyJpc3MiOiJqb2UiLA0KICJleHAiOjEzMDA4MTkzODAsDQogImh0dHA6Ly9leGFt
+cGxlLmNvbS9pc19yb290Ijp0cnVlfQ
+.
+dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk
+\end{verbatim}
+
+\end{frame}
+
+\begin{frame}{JWS: JSON Web Signature}
+
+Header Parameters
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  \textbf{alg}: Algorithm identifier for JWS
+\item
+  \textbf{jku}: JWK Set URL
+\item
+  \textbf{jkw}: JSON Web Key (JWK)
+\item
+  \textbf{kid}: Key ID
+\item
+  \textbf{x5u}: X.509 URL
+\item
+  \textbf{x5c}: X.509 Chain
+\item
+  \textbf{x5t} and \textbf{x5t\#S256}: X.509 Cert. Thumbprint
+\item
+  \textbf{typ}: ``Type'' (MIME)
+\item
+  \textbf{cty}: Content Type
+\item
+  \textbf{crit}: ``Critical'' specifies fields that MUST be protected
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{JWE: JSON Web Encryption}
+
+Format is very similar to JWS, but used for encryption of data
+
+\begin{verbatim}
+BASE64URL(UTF8(JWE Protected Header)) || '.' ||
+BASE64URL(JWE Encrypted Key) || '.' ||
+BASE64URL(JWE Initialization Vector) || '.' ||
+BASE64URL(JWE Ciphertext) || '.' ||
+BASE64URL(JWE Authentication Tag)
+\end{verbatim}
+
+https://tools.ietf.org/html/draft-ietf-jose-json-web-encryption
+
+\end{frame}
+
+\begin{frame}{JWE: JSON Web Encryption}
+
+Header Parameters
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  \textbf{alg}: Algorithm identifier for JWE
+\item
+  \textbf{enc}: Content Encryption Algorithm
+\item
+  \textbf{zip}: Compression algorithm to be used
+\item
+  \textbf{jku}: JWK Set URL
+\item
+  \textbf{jkw}: JSON Web Key (JWK)
+\item
+  \textbf{kid}: Key ID
+\item
+  \textbf{x5u}: X.509 URL
+\item
+  \textbf{x5c}: X.509 Chain
+\item
+  \textbf{x5t} and \textbf{x5t\#S256}: X.509 Cert. Thumbprint
+\item
+  \textbf{typ}: ``Type'' (MIME)
+\item
+  \textbf{cty}: Content Type
+\item
+  \textbf{crit}: ``Critical'' specifies fields that MUST be protected
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{JWE: JSON Web Encryption}
+
+Example (flattened JSON representation):
+
+\small
+
+\begin{verbatim}
+{
+"protected":
+ "eyJlbmMiOiJBMTI4Q0JDLUhTMjU2In0",
+"unprotected":
+ {"jku":"https://server.example.com/keys.jwks"},
+"header":
+ {"alg":"A128KW","kid":"7"},
+"encrypted_key":
+ "6KB707dM9YTIgHtLvtgWQ8mKwboJW3of9locizkDTHzBC2IlrT1oOQ",
+"iv":
+ "AxY8DCtDaGlsbGljb3RoZQ",
+"ciphertext":
+ "KDlTtXchhZTGufMYmOYGS4HffxPSUrfmqCHXaI9wOGY",
+"tag":
+ "Mz-VPPyU4RlcuYv1IwIvzw"
+}
+\end{verbatim}
+
+\end{frame}
+
+\begin{frame}{JWA: JSON Web Algorithms}
+
+\begin{itemize}
+\item
+  JWA Specifies a list of crypto primitives (algorithms) to be used in
+  conjunction with JOSE and their parameters
+\item
+  Not going into that in this talk. Some of them you've already seen in
+  previous examples, if you want more details on the algorithms that can
+  be used look into the draft
+\item
+  \textbf{DON'T} home-brew your own crypto with these. Use existing,
+  verified, technologies that build on JOSE
+\end{itemize}
+
+https://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms
+
+\end{frame}
+
+\section{Examples}\label{examples}
+
+\begin{frame}[fragile]{Running Code}
+
+Implementations in all popular languages are available on GitHub!
+
+\begin{block}{Python}
+
+\small
+
+\begin{verbatim}
+import jose
+
+claims = {
+    "iss": "http://www.example.com",
+    "exp": int(time()) + 3600,
+    "sub": 42,
+}
+
+jwk = {"k": "password"}
+jws = jose.sign(claims, jwk, alg="HS256")
+\end{verbatim}
+
+http://jose.readthedocs.org/en/latest/
+
+\end{block}
+
+\end{frame}
+
+\begin{frame}{Authentication Protocols}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  OAuth
+\item
+  OpenID / OAuth2.0
+\end{itemize}
+
+..client authentication and authorization can be handeled by JOSE / Web
+Tokens entirely.
+
+See:
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  https://tools.ietf.org/html/draft-ietf-oauth-jwt-bearer
+\item
+  https://developers.google.com/accounts/docs/OpenIDConnect
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Google Wallet}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Google Wallet uses JWT to exchange information between clients (app)
+  and Server
+\end{itemize}
+
+https://developers.google.com/wallet/instant-buy/about-jwts
+
+\end{frame}
+
+\begin{frame}{ACME / Let's Encrypt}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  The protocol that Let's Encrypt employs (ACME) uses JOSE for messaging
+\item
+  i.e.~claims for certificates / domains and revocation
+\end{itemize}
+
+https://letsencrypt.github.io/acme-spec/
+
+\end{frame}
+
+\begin{frame}{W3C WebCrypto}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  W3C WebCrypto is a JavaScript API for performing basic cryptographic
+  operations in web applications
+\item
+  W3C WebCrypto employs JOSE (Key Format, Signatures, Algorithms)
+\end{itemize}
+
+\end{frame}
