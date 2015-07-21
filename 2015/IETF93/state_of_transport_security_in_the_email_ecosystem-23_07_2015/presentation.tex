@@ -1,0 +1,100 @@
+%% Author:  Aaron <azet@azet.org> Zauner
+%% License: https://creativecommons.org/licenses/by-nc-nd/4.0/
+
+%% theme and colorscheme
+\documentclass[hyperref={draft}, aspectratio=169, compress, 10pt]{beamer}
+\usecolortheme[light,accent=orange]{modifiedsolarized}
+\beamertemplatetransparentcovered
+\setbeamertemplate{navigation symbols}{}
+
+%% packages
+\usepackage[T1]{fontenc}
+\usepackage[sfdefault,thin]{roboto}
+\usepackage{textpos}
+\usepackage{tikz}
+\usepackage{mathtools}
+\usepackage{cryptocode}
+\usepackage{appendixnumberbeamer}
+
+%% footer
+\setbeamertemplate{footline}[text line]{%
+  \parbox{\linewidth}{\vspace*{-15pt}
+          \insertdate \hfill \inserttitle \newline
+          \insertshortauthor \hfill \insertframenumber/\inserttotalframenumber
+         }}
+\setbeamertemplate{navigation symbols}{}
+
+%% title
+\title{State of Transport Security in the E-Mail Ecosystem at Large}
+
+%% author and affilliation
+\author[Aaron Zauner]{Aaron Zauner}
+
+%% venue and date
+\date{IETF93 Prague, Security Area Open Meeting - 23/07/2015}
+
+
+%% main
+\begin{document}
+
+% enables straight single quote
+\makeatletter
+\let \@sverbatim \@verbatim
+\def \@verbatim {\@sverbatim \verbatimplus}
+{\catcode`'=13 \gdef \verbatimplus{\catcode`'=13 \chardef '=13 }} 
+\makeatother
+
+% enables backticks in verbatim
+\makeatletter
+{\catcode`\`=13
+\xdef\@verbatim{\unexpanded\expandafter{\@verbatim}\chardef\noexpand`=18 }
+}
+\makeatother
+
+{
+\setbeamertemplate{footline}{}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+}
+\addtocounter{framenumber}{-1}
+
+{
+\setbeamertemplate{footline}{}
+
+\begin{frame}
+  \tableofcontents
+\end{frame}
+
+}
+\addtocounter{framenumber}{-1}
+
+\addtobeamertemplate{frametitle}{}{%
+  \begin{tikzpicture}[remember picture,overlay]
+    \node[anchor=north east,yshift=1pt] at (current page.north east) {
+      \includegraphics[height=30px]{ietf_logo}
+    };
+  \end{tikzpicture}
+}
+
+
+\IfFileExists{contentgenerated.tex}{\input{"contentgenerated.tex"}}{\input{"content.tex"}}
+
+\begin{frame}
+  \begin{center}
+    \textsc{Thanks for your patience. Are there any questions?}
+  \end{center}
+\end{frame}
+
+
+%% appendix
+%\appendix
+%\begin{frame}{Bonus Slides}
+%blablabla
+%\end{frame}
+
+
+\end{document}
+
