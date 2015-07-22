@@ -44,17 +44,17 @@ POP3  & 86,51                & 13,49     \\
 
 
 ## AUTH PLAIN offered by hosts
-### SMTP (25) - AUTH PLAIN
-* 917,536 do not offer STARTTLS
-* 1,722,387 offer STARTTLS
+### SMTP (25)
+* 917,536 - AUTH PLAIN, no STARTTLS support
+* 1,722,387 - AUTH PLAIN & STARTTLS
 
-### IMAP (143) - AUTH PLAIN
-* 211,962 do not offer STARTTLS
-* 3,243,632 offer STARTTLS
+### IMAP (143)
+* 211,962 - AUTH PLAIN, no STARTTLS support
+* 3,243,632 - AUTH PLAIN & STARTTLS
 
-### POP3 (110) - AUTH PLAIN
-* 225,341 do not offer STLS
-* 3,391,525 offer STLS
+### POP3 (110)
+* 225,341 - AUTH PLAIN, no STARTTLS support
+* 3,391,525 AUTH PLAIN & STARTTLS
 
 ## Certificates
 \begin{figure}[h!]
@@ -64,6 +64,14 @@ POP3  & 86,51                & 13,49     \\
 
 ssc: signed certificate, ok: CA signed, local: unable to get local
 issuer certificate, ssc chain: self signed certificate in certificate chain (Mozilla Truststore)
+
+## Certificates (cont.)
+### SMTP and SMTPS
+* Almost all leafs >= 1024 bit RSA (most 2048)
+* Same for intermediates (fewer than 200 with less than 1024 bit RSA)
+
+### POP3(S) and IMAP(S)
+* Very similar results, a few more low-bit leaf and intermediates.
 
 ## Weak ciphers and Anon-DH
 
@@ -76,6 +84,23 @@ issuer certificate, ssc chain: self signed certificate in certificate chain (Moz
 
 ### POP(S)/IMAP(S)
 * Nothing too exciting, ask me about details if you're interested
+
+## Key-exchange
+
+### DH(E)
+* Large number of 512bit DH primes in SMTP
+* Sigificant amount of DH group size =< 1024 in all studied protocols
+
+### ECDH(E)
+* Group size: most use 256, some 384, very few 521 throughout studied
+  protocols
+
+### Common Primes
+* Apache prime (Adrian et al 'Weak-DH' paper) not used
+* mod_ssl prime: some users, very few
+
+
+*more on this topic TBD*
 
 ## Weak Keys
 Analyzed 40,268,806 collected certificates. Rather unspecacular:
@@ -92,8 +117,9 @@ Analyzed 40,268,806 collected certificates. Rather unspecacular:
 # Conclusion
 ## Conclusion
 * First to conduct such a detailed study for E-Mail
-* Pretty much what we expected - no big surprises in the results
-* A lot of issues with transport security in the e-mail ecosystem
-* More studies and analysis upcoming
-* ..as are publications
+    - A lot of issues with transport security in the e-mail ecosystem
+    - Results are pretty much what we've expected beforehand
+    - We'll publish all collected datasets (soon-ish)
+* More studies, analysis and papers forthcoming
 * We have tons of additional data, if you have specific questions write us!
+

@@ -87,38 +87,38 @@ POP3  & 86,51                & 13,49     \\
 
 \begin{frame}{AUTH PLAIN offered by hosts}
 
-\begin{block}{SMTP (25) - AUTH PLAIN}
+\begin{block}{SMTP (25)}
 
 \begin{itemize}
 \itemsep1pt\parskip0pt\parsep0pt
 \item
-  917,536 do not offer STARTTLS
+  917,536 - AUTH PLAIN, no STARTTLS support
 \item
-  1,722,387 offer STARTTLS
+  1,722,387 - AUTH PLAIN \& STARTTLS
 \end{itemize}
 
 \end{block}
 
-\begin{block}{IMAP (143) - AUTH PLAIN}
+\begin{block}{IMAP (143)}
 
 \begin{itemize}
 \itemsep1pt\parskip0pt\parsep0pt
 \item
-  211,962 do not offer STARTTLS
+  211,962 - AUTH PLAIN, no STARTTLS support
 \item
-  3,243,632 offer STARTTLS
+  3,243,632 - AUTH PLAIN \& STARTTLS
 \end{itemize}
 
 \end{block}
 
-\begin{block}{POP3 (110) - AUTH PLAIN}
+\begin{block}{POP3 (110)}
 
 \begin{itemize}
 \itemsep1pt\parskip0pt\parsep0pt
 \item
-  225,341 do not offer STLS
+  225,341 - AUTH PLAIN, no STARTTLS support
 \item
-  3,391,525 offer STLS
+  3,391,525 AUTH PLAIN \& STARTTLS
 \end{itemize}
 
 \end{block}
@@ -135,6 +135,32 @@ POP3  & 86,51                & 13,49     \\
 ssc: signed certificate, ok: CA signed, local: unable to get local
 issuer certificate, ssc chain: self signed certificate in certificate
 chain (Mozilla Truststore)
+
+\end{frame}
+
+\begin{frame}{Certificates (cont.)}
+
+\begin{block}{SMTP and SMTPS}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Almost all leafs \textgreater{}= 1024 bit RSA (most 2048)
+\item
+  Same for intermediates (fewer than 200 with less than 1024 bit RSA)
+\end{itemize}
+
+\end{block}
+
+\begin{block}{POP3(S) and IMAP(S)}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Very similar results, a few more low-bit leaf and intermediates.
+\end{itemize}
+
+\end{block}
 
 \end{frame}
 
@@ -169,6 +195,48 @@ chain (Mozilla Truststore)
 \item
   Nothing too exciting, ask me about details if you're interested
 \end{itemize}
+
+\end{block}
+
+\end{frame}
+
+\begin{frame}{Key-exchange}
+
+\begin{block}{DH(E)}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Large number of 512bit DH primes in SMTP
+\item
+  Sigificant amount of DH group size =\textless{} 1024 in all studied
+  protocols
+\end{itemize}
+
+\end{block}
+
+\begin{block}{ECDH(E)}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Group size: most use 256, some 384, very few 521 throughout studied
+  protocols
+\end{itemize}
+
+\end{block}
+
+\begin{block}{Common Primes}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Apache prime (Adrian et al `Weak-DH' paper) not used
+\item
+  mod\_ssl prime: some users, very few
+\end{itemize}
+
+\emph{more on this topic TBD}
 
 \end{block}
 
@@ -215,14 +283,21 @@ djb)}
 \itemsep1pt\parskip0pt\parsep0pt
 \item
   First to conduct such a detailed study for E-Mail
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    A lot of issues with transport security in the e-mail ecosystem
+  \item
+    Results are pretty much what we've expected beforehand
+  \item
+    We'll publish all collected datasets (soon-ish)
+  \end{itemize}
 \item
-  Pretty much what we expected - no big surprises in the results
+  More studies, analysis and papers forthcoming
 \item
-  A lot of transport security in the e-mail ecosystem
-\item
-  More studies and analysis upcoming
-\item
-  ..as are publications
+  We have tons of additional data, if you have specific questions write
+  us!
 \end{itemize}
 
 \end{frame}
