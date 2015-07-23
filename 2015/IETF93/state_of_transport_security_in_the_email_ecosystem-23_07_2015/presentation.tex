@@ -3,7 +3,8 @@
 
 %% theme and colorscheme
 \documentclass[hyperref={draft}, aspectratio=169, compress, 10pt]{beamer}
-\usecolortheme[light,accent=orange]{modifiedsolarized}
+%\usecolortheme[light,accent=orange]{modifiedsolarized}
+\usetheme{bjeldbak}
 \beamertemplatetransparentcovered
 \setbeamertemplate{navigation symbols}{}
 
@@ -73,7 +74,7 @@
 
 \addtobeamertemplate{frametitle}{}{%
   \begin{tikzpicture}[remember picture,overlay]
-    \node[anchor=north east,yshift=1pt] at (current page.north east) {
+    \node[anchor=north east,yshift=2pt] at (current page.north east) {
       \includegraphics[height=30px]{ietf_logo}
     };
   \end{tikzpicture}
