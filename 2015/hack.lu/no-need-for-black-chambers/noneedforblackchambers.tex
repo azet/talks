@@ -1,0 +1,469 @@
+\documentclass[14pt,aspectratio=43]{beamer}
+
+\usepackage[utf8x]{inputenc}
+\usepackage{hyperref}
+%\hypersetup{colorlinks,allcolors=sbablue}
+\usepackage{todonotes}
+\usepackage{minted}
+\usepackage{pdfpcnotes}
+
+\usetheme[framenumber,nologo]{SBA}
+% --> OPTIONS <----------------------------------------------------------------
+%   * framenumber: show current framenumber
+%   * totalframenumber: add total framenumber
+%   * nologo: do not show partner logos on title page
+%   * blackfont: Only use black as fontcolor
+%   * titlebg: Only show blue bar at first slide
+%   * nobg: Do not show blue bar at all ( overrules titlebg)
+%\usetheme[framenumber,totalframenumber,plain]{SBA}
+%\usetheme[plain,blackfont,framenumber,totalframenumber,nobg]{SBA}
+% --> END OPTIONS <------------------------------------------------------------
+
+
+\title{No Need for Black Chambers}
+\subtitle{Testing TLS in the E-mail Ecosystem at Large}
+  \author{Wilfried Mayer, \textbf{Aaron Zauner}, Martin Mulazzani, Markus Huber (FH St-Poelten)}
+\emailaddr{flast@sba-research.org}
+
+\begin{document}
+
+
+\maketitle
+
+
+\begin{frame}
+  \frametitle{Overview}
+  \tableofcontents
+\end{frame}
+
+\section{Background}
+\sectionpage
+
+\begin{frame}
+  \frametitle{E-mail \& TLS}
+  \begin{itemize}
+    \item TLS in HTTP (aka HTTPS) is a well understood subject, lots of research
+    \item We have't seen a lot of research into other application layer protocols
+    \begin{itemize}
+      \item especially on high-confidentiality / traffic systems like E-mail protocols
+    \end{itemize}
+    \item Many people use (at times moderately secured) public mail services (e.g. Gmail), but there're millions of mail-daemons around on the internet
+    \item Misconfiguration and word-of-mouth considering crypto settings among admins
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Recap: E-Mail protocols and their associated ports}
+
+\begin{table}
+    \begin{center}
+    \begin{tabular}{llll}
+        \hline
+        Port \hspace{0.05cm} & TLS  \hspace{0.05cm} & Protocol  \hspace{0.05cm} & Usage \\
+        \hline
+        25 & STARTTLS & SMTP & E-mail transmission \\
+        110 & STARTTLS & POP3 & E-mail retrieval \\
+        143 & STARTTLS & IMAP & E-mail retrieval \\
+        465 & implicit & SMTPS & E-mail submission\\
+        587 & STARTTLS & SMTP & E-mail submission \\
+        993 & implicit & IMAPS & E-mail retrieval \\
+        995 & implicit & POP3S & E-mail retrieval \\
+    \hline \\
+    \end{tabular}
+    \label{tbl:emailPorts}
+    \end{center}
+\end{table}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Flow: mail submission until delivery}
+  \begin{center}
+     \includegraphics*[scale=0.7]{images/mail_flow.png}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{STARTTLS \& SMTP}
+  \begin{center}
+    \includegraphics*[scale=0.5]{images/smtp_handshake.png}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \begin{center}
+    \includegraphics*[scale=0.38]{images/smtp_starttls_flow.png}
+  \end{center}
+\end{frame}
+
+
+\section{Methodology}
+\sectionpage
+
+\begin{frame}
+  \frametitle{So we scanned the entire IPv4 space!}
+  \begin{itemize}
+    \item used \texttt{masscan} for discovery scans and X.509 Certificate collection
+    \item customized \texttt{sslyze} and built a queueing framework around it
+    \item More than 10 billion TLS handshakes over the course of a couple of months (not counting discovery scans)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{TLS enumeration}
+  \begin{center}
+    \includegraphics*[scale=0.13]{images/dummy_scan_da.png}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Input dataset / collection}
+  \begin{center}
+    \includegraphics*[scale=0.4]{images/general_process.png}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Scan flow}
+  \begin{center}
+    \includegraphics*[scale=0.4]{images/deployment_single_machine.png}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Processing flow}
+  \begin{center}
+    \includegraphics*[scale=0.4]{images/processing_flow.png}
+  \end{center}
+\end{frame}
+
+
+\section{Results}
+\sectionpage
+
+\begin{frame}
+  \begin{itemize}
+    \item Conducted 20,270,768 scans over seven different TCP ports (april to august 2015)
+    \item 18,381,936 valid reponses (551 TLS handshakes per host/port combination)
+    \item 89.78\% handshakes rejected, 8.26\% accepted and 1.95\% error (combinatorial explosion - protocols, ports, ciphersuites and SSL/TLS versions)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Protocol version support}
+  \begin{center}
+    \includegraphics*[scale=0.8]{images/plot-supported-protocols.pdf}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Key-exchange security}
+  Diffie-Hellman - DH(E):
+  \begin{itemize}
+    \item Large amount of 512bit DH primes in SMTP (\textbf{EXPORT}!)
+    \item DH group size below or equal to 1024 bit is very common in all protocols
+  \end{itemize}
+  Elliptic Curve Diffie-Hellman - ECDH(E):
+  \begin{itemize}
+    \item SMTP: 99\% use \texttt{secp256r1} curve
+    \item POP/IMAP: about 70\% use \texttt{secp384r1} cuve
+    \item Most use 256 bit group size
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Key-exchange security: common primes}
+  \begin{itemize}
+    \item SMTP: a 512 bit prime used by 64\%, a 1024 bit prime used by 69\% (Postfix)
+  \item 512 bit Postfix prime:
+  \small
+  \texttt{0x00883f00affc0c8ab835cde5c20f55d\\
+          f063f1607bfce1335e41c1e03f3ab17f6\\
+          635063673e10d73eb4eb468c4050e691a\\
+          56e0145dec9b11f6454fad9ab4f70ba5b}\\
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Server-preferred TLS 1.0 ciphersuites}
+  TLS 1.0 most widely supported (above 90\% support in each mail protocol):
+  \begin{itemize}
+    \item \texttt{DHE-RSA-AES256-SHA}\\ \small{25: 49.64\% 110: 68.03\% 143:  67.89\% 465: 79.32\% 587: 47.72\%  993: 68.39\% 995: 69.65\%} 
+    \item \texttt{ECDHE-RSA-AES256-SHA}\\ \small{25: 43.67\% 110: 6.44\% 143: 6.84\% 465: 11.49\% 587: 23.01\% 993: 7.43\% 995: 6.13\%}
+    \item \texttt{AES256-SHA}\\ \small{25: 4.94\% 110: 17.67\% 143: 17.89\% 465: 7.17\% 587: 16.41\% 993: 17.23\% 995: 17.25\%}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \begin{center}
+    \includegraphics*[scale=0.8]{images/plot-selected-primitives.pdf}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{\texttt{AUTH-PLAIN}}
+  \begin{itemize}
+    \item Not everything is crypto related
+    \item If you do plaintext authentication \emph{before} you upgrade to TLS, one can sniff/strip
+    \item While some hosts offer \texttt{AUTH-PLAIN} without STARTTLS support, a lot offer it before doing an upgrade
+  \end{itemize}
+\small
+\begin{table}
+\centering
+\begin{tabular}{lrrr}
+\hline
+Port   & no STARTTLS  & STARTTLS & Total Hosts\\
+\hline
+25  & 12.90\%         & 24.21\%  & 7,114,171 \\
+110 & 4.24\%          & 63.86\%  & 5,310,730 \\
+143 & 4.38\%          & 66.97\%  & 4,843,513 \\
+587 & 15.41\%         & 42.80\%  & 2,631,662 \\
+\hline \\
+\end{tabular}
+\end{table}
+\end{frame}
+
+\begin{frame}
+  \frametitle{X.509 Certificates: self vs. CA-signed}
+  \begin{center}
+    \includegraphics*[scale=0.74]{images/plot-mozilla-trust-store.pdf}\\
+  \tiny{Compared to Mozilla Truststore:\\ssc: self-signed, ok: CA signed, local: unable to get local issuer, ssc chain: self-signed in chain}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{X.509 Certificates (cont.)}
+  \begin{center}
+   \begin{itemize}
+    \item 99\% of leafs use RSA (vs. e.g. ECDSA)
+    \item Most SMTP(S) leafs and intermediates above 1024bit RSA (most 2k)
+    \item Less than 10\% use 4096bit RSA public keys
+    \item SHA1 Fingerprint: \texttt{b16c\ldots6e24} was provided on 85,635 IPs in 2 different /16 IP ranges
+   \end{itemize}
+\vspace{10px}
+\tiny
+\begin{table}[]
+\centering
+\begin{tabular}{lrrrr}
+\hline
+Name      & Key Size & IPs \\
+\hline
+Parallels Panel - Parallels                                & 2048        & 306,852  \\
+imap.example.com - IMAP server                             & 1024        & 261,741  \\
+Automatic{\ldots}POP3 SSL key - Courier Mail Server        & 1024        &  87,246   \\
+Automatic{\ldots}IMAP SSL key - Courier Mail Server        & 1024        &  83,976   \\
+Plesk - Parallels                                          & 2048        &  68,930   \\
+localhost.localdomain - SomeOrganizationalUnit             & 1024        &  26,248   \\
+localhost - Dovecot mail server                            & 2048        &  13,134   \\
+plesk - Plesk - SWsoft, Inc.                               & 2048        &  14,207   \\
+\hline \\      
+\end{tabular}
+\end{table}
+
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \begin{center}
+\tiny
+\begin{table}[]
+\centering
+\begin{tabular}{lllr}
+\hline
+Common Name (Issuer Common Name) & Fingerprint & Port & IPs \\
+\hline
+*.nazwa.pl (nazwaSSL)               & b16c\ldots6e24 & 25 &  40,568 \\
+                                                &                & 465 & 81,514 \\
+                                                &                & 587 & 84,318 \\
+                                                &                & 993 & 85,637 \\
+                                                &                & 995 & 85,451 \\
+\hline
+*.pair.com (USERTrust RSA Organization \ldots)  & a42d\ldots768f & 25 & 15,573  \\
+                                                &                & 110 & 60,588 \\
+                                          &                & 143 & 13,186 \\
+                                                &                & 465 & 63,248 \\
+                                                &                & 587 & 61,933 \\
+                                                &                & 993 & 64,682 \\
+                                                &                & 995 & 64,763 \\
+\hline
+*.home.pl (RapidSSL SHA256 CA - G3)             & 8a4f\ldots6932 & 110 & 126,174 \\
+                                                &                & 143 & 26,735  \\
+                                                &                & 587 & 125,075 \\
+*.home.pl (AlphaSSL CA - SHA256 - G2)           & c4db{\ldots}a488 & 993 & 128,839  \\
+                                                &                  & 995 & 126,102  \\
+\hline
+*.sakura.ne.jp (RapidSSL SHA256 CA - G3)        & 964b{\ldots}c39e & 25 & 16,573 \\
+\hline 
+*.prod.phx3.secureserver.net (Starfield \ldots) & f336{\ldots}ac57 & 993 & 61,307 \\
+                                                &                  & 995 & 61,250 \\
+\hline \\ 
+\end{tabular}
+\caption{Common leaf certificates}
+\label{tab:common-certificates}
+\end{table}
+
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{X.509 Certificates: weak RSA keys}
+  \begin{center}
+  \begin{itemize}
+    \item Analyzed 40,268,806 collected certificates similar to Heninger et al. ``Mining Your Ps and Qs''
+    \item 30,757,242 RSA moduli
+    \item 2,354,090 uniques
+    \item Fast-GCD (algo. due to djb, impl. due to Heninger et al.)
+    \item 456 GCDs found (= RSA private keys recovered)
+  \end{itemize}
+  \end{center}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{X.509 Certificates: volatility}
+  \begin{center}
+    \includegraphics*[scale=0.8]{images/smtp_volatility.pdf}\\
+  \tiny{based on scans.io data}
+  \end{center}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{X.509 Certificates: volatility (cont.)}
+  \begin{center}
+    \includegraphics*[scale=0.8]{images/mua_volatility.pdf}\\
+  \tiny{based on scans.io data}
+  \end{center}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Collateral damage}
+  \begin{center}
+   \begin{itemize}
+     \item open-source mail daemons are easily DoS'ed - test carefully
+     \item (re)discovered a \texttt{dovecot} bug: (CVE-2015-3420, investigated and reported by Hanno Boeck)
+     \item \texttt{OpenSSL} will establish \textbf{EXPORT} ciphersuites with TLS 1.1 and 1.2 (although the spec explicitly says \texttt{MUST NOT}). Core-team reponse: confusion and finally "not a security issue". you are implementing a network security / crypto protocol the wrong way?! (AFAIK unfixed)
+   \end{itemize}
+  \end{center}
+\end{frame}
+
+\section{Abuse-handling}
+\sectionpage
+%% stats on mails
+%    Die Zahlen sind nur ca. aus meinem Thunderbird -> genau sind die nicht
+% Auto 52
+% 8 Hacked
+% 16 Blacklist
+% 5 DoS. zu aggressiv
+% offensive personal 8
+
+\begin{frame}
+  \frametitle{Scanning considerations}
+  \begin{itemize}
+    \item Get an upstream ISP that is willing to help your research
+    \item Depending on local law: maybe even a good team of lawyers
+    \item People \textbf{will be pissed off}!
+    \item ..they even might write to your management or unrelated 3rd parties
+    \item WHOIS / RIPE entry explaining the research project - abuse contact
+    \item webpage on the scan host explaining the research project - abuse contact
+    \item handle each mail request professionally - regardless
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Some statistics}
+  \begin{itemize}
+    \item Recieved 89 mails in total (as of submitting the paper in august)
+    \item 52 auto generated by IDS / ops tooling
+    \item 16 simple blacklisting requests (sometimes large CIDR ranges)
+    \item A few were blatantly rude
+    \item A few very interested in our work
+    \item We also recieve quite some amount of spam on our abuse address
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{You'll recieve these mails as well}
+  \begin{center}
+     \includegraphics*[scale=0.32]{images/abusemail.png}
+  \end{center}
+\end{frame}
+
+\section{Mitigation}
+\sectionpage
+
+\begin{frame}
+  \frametitle{Solid server configurations \& awareness}
+  \begin{center}
+  \begin{itemize}
+    \item \url{bettercrypto.org}
+    \item Mozilla Server TLS Security guide: \url{https://wiki.mozilla.org/Security/Server_Side_TLS}
+    \item RFC 7457 (Summarizing Known Attacks on Transport Layer Security (TLS) and Datagram TLS (DTLS)) and RFC 7525 (Recommendations for Secure Use of Transport Layer Security (TLS) and Datagram Transport Layer Security (DTLS))
+    \item educating administrators, managers and operational people
+  \end{itemize}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Key pinning}
+  \begin{center}
+  \begin{itemize}
+    \item Public keys get pinned on first use (TOFU)
+    \item Elegant solution but difficult deployment model (non-technies won't deploy)
+    \item HPKP (for HTTPS) available, not really deployed yet
+    \item TACK(.io) is a universal TLS extension that would also fit e.g. STARTTLS protocols (deadlocked in IETF)
+  \end{itemize}
+  \end{center}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{DNSSEC / DANE}
+  \begin{center}
+  \begin{itemize}
+    \item DANE is a very nice protocol but:
+    \item DNSSEC shifts trust to TLDs instead of CAs
+    \item DNSSEC has huge deployment problems (especially on end-user devices)
+    \item It's still one option that \emph{could} work, so why not deploy in addition?
+  \end{itemize}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{DKIM, SPF, DMARC}
+    especially if you're hosting a large environment you \emph{MUST} deploy:
+  \begin{center}
+  \begin{itemize}
+    \item DKIM (DomainKeys Identified Mail)
+    \item SPF (Sender Policy Framework)
+    \item DMARC (Domain-based Message Authentication, Reporting, and Conformance)
+  \end{itemize}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{New efforts in IETF and beyond}
+  \begin{center}
+  \begin{itemize}
+    \small
+    \item DEEP (Deployable Enhanced Email Privacy) - similar to how HSTS works for HTTPS
+    \item Let's Encrypt by EFF et al (beta live since tuesday!)
+    \item \texttt{draft-ietf-uta-email-tls-certs-05}:\\ Identity verification for SMTP/POP/IMAP/ManageSieve updates various RFCs
+    \item IETF works on a new OpenPGP spec
+    \item Continued scans necessary to track change over time
+    \item Publish all data sets!
+  \end{itemize}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \begin{center}
+    \huge{Questions?}\\
+    \small{\texttt{abuse@sba-research.org}}\\
+    \includegraphics*[scale=0.2]{images/team.jpg}\\
+  \end{center}
+\end{frame}
+
+\makeendpage
+
+\end{document}

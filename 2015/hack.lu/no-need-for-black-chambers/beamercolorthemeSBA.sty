@@ -1,0 +1,74 @@
+
+
+\mode<presentation>
+
+% --> COLORS <-----------------------------------------------------------------
+
+\definecolor{sbablue}{RGB}{0,147,208}
+\colorlet{sbablue100}{sbablue}
+\colorlet{sbablue75} {sbablue!75!white}
+\colorlet{sbablue50} {sbablue!50!white}
+\colorlet{sbablue25} {sbablue!25!white}
+\colorlet{sbablue10} {sbablue!10!white}
+\colorlet{sbablue5}  {sbablue!5!white}
+
+
+\definecolor{sbabluesub}{RGB}{115,179,220}
+\definecolor{sbagrey}{RGB}{137,137,137}
+
+
+\definecolor{sbared}{RGB}{126,0,47}
+\colorlet{sbared100}{sbared}
+\colorlet{sbared75} {sbared!75!white}
+\colorlet{sbared50} {sbared!50!white}
+\colorlet{sbared25} {sbared!25!white}
+\colorlet{sbared10} {sbared!10!white}
+\colorlet{sbared5}  {sbared!5!white}
+
+% --> END COLORS <-------------------------------------------------------------
+
+
+% --> TEXTCOLOR <--------------------------------------------------------------
+\setbeamercolor{author}{fg=black}%
+
+\ifbeamer@blackfont%
+
+  \setbeamercolor{structure}{fg=black}%
+  \setbeamercolor{normal text}{fg=black}%
+  \setbeamercolor{frametitle}{fg=black}%
+  \setbeamercolor{frame number in foot}{fg=black}%
+
+\else%
+
+  \setbeamercolor{structure}{fg=black}%
+  \setbeamercolor{normal text}{fg=black}%
+  \setbeamercolor{frametitle}{fg=sbablue}%
+
+  \setbeamercolor{link in text}{fg=sbablue}%
+  \setbeamercolor{frame number in foot}{fg=sbagrey}%
+  \setbeamercolor{title}{fg=sbablue}%
+  \setbeamercolor{subtitle}{fg=sbabluesub}%
+
+\fi
+
+% alert color
+\setbeamercolor{alerted text}{fg=sbared}
+
+% --> END TEXTCOLOR <----------------------------------------------------------
+
+
+% --> BLOCKCOLOR <-------------------------------------------------------------
+
+\setbeamercolor{block title}{use=structure,fg=white,bg=sbablue}
+\setbeamercolor{block title alerted}{use=alerted text,fg=white,bg=sbared}
+\setbeamercolor{block title example}{use=example text,fg=white,bg=sbablue}
+
+\setbeamercolor{block body}        {fg=sbablue,use=block title,bg=sbablue10}
+\setbeamercolor{block body alerted}{fg=sbablue,use=block title alerted,bg=sbared10}
+\setbeamercolor{block body example}{fg=sbablue,use=block title example,bg=sbablue10}
+
+% --> END BLOCKCOLOR <---------------------------------------------------------
+
+
+\mode
+<all>
