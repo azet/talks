@@ -1,0 +1,50 @@
+
+\mode<presentation>
+
+% Remove Navigation at bottom line
+\beamertemplatenavigationsymbolsempty 
+
+
+% --> TITLE PAGE <-------------------------------------------------------------
+\defbeamertemplate*{title page}{ua theme}
+{
+  \begin{centering}
+    \vskip4ex%
+    \usebeamerfont{title}\usebeamercolor[fg]{title}\textbf{\inserttitle}\par%
+  \ifx\insertsubtitle\@empty%
+  \else%
+    \vskip1ex%
+    {
+    \usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par}%
+  \fi%
+  \ifx\insertauthor\@empty%
+  \else%
+    \vskip1ex%
+    {
+    \usebeamerfont{author}\usebeamercolor[fg]{author}\insertauthor\par}%
+  \fi%
+  \vfill%
+  \end{centering}
+}
+% --> END TITLE PAGE <---------------------------------------------------------
+
+
+% --> BLOCKS <-----------------------------------------------------------------
+\setbeamertemplate{blocks}[rounded]
+% --> END BLOCKS <-------------------------------------------------------------
+
+
+% --> ITEMS <------------------------------------------------------------------
+\setbeamertemplate{itemize item}{\scriptsize\raise1.25pt\hbox{\donotcoloroutermaths$\bullet$}}
+%\setbeamertemplate{itemize subitem}{\tiny\raise1.5pt\hbox{\donotcoloroutermaths$\blacktriangleright$}}
+\setbeamertemplate{itemize subitem}{\tiny\raise1.5pt\hbox{\donotcoloroutermaths$\circ$}}
+\setbeamertemplate{itemize subsubitem}{\tiny\raise1.5pt\hbox{\donotcoloroutermaths$-$}}
+\setbeamertemplate{enumerate item}{\insertenumlabel.}
+\setbeamertemplate{enumerate subitem}{\insertenumlabel.\insertsubenumlabel}
+\setbeamertemplate{enumerate subsubitem}{\insertenumlabel.\insertsubenumlabel.\insertsubsubenumlabel}
+\setbeamertemplate{enumerate mini template}{\insertenumlabel}
+% --> END ITEMS <--------------------------------------------------------------
+
+
+\mode
+<all>

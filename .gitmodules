@@ -1,0 +1,3 @@
+[submodule "foreign/travis-ci-latex-pdf"]
+	path = foreign/travis-ci-latex-pdf
+	url = https://github.com/harshjv/travis-ci-latex-pdf.git

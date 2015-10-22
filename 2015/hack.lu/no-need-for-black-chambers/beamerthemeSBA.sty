@@ -1,0 +1,138 @@
+% Copyright 2009--2011 by Nico Schlömer
+%
+% This file may be distributed and/or modified
+%
+% 1. under the LaTeX Project Public License and/or
+% 2. under the GNU Public License.
+
+
+% -------------------------------------------------------------------------
+% introduce options
+\DeclareOptionBeamer{compress}{\beamer@compresstrue}
+
+\newif\ifbeamer@dark
+\beamer@darkfalse
+\DeclareOptionBeamer{dark}{\beamer@darktrue}
+
+\newif\ifbeamer@nologo
+\beamer@nologofalse
+\DeclareOptionBeamer{nologo}{\beamer@nologotrue}
+
+
+\newif\ifbeamer@nobg
+\beamer@nobgfalse
+\DeclareOptionBeamer{nobg}{\beamer@nobgtrue}
+
+\newif\ifbeamer@titlebg
+\beamer@titlebgfalse
+\DeclareOptionBeamer{titlebg}{\beamer@titlebgtrue}
+
+
+
+\newif\ifbeamer@darktitle
+\beamer@darktitlefalse
+\DeclareOptionBeamer{darktitle}{\beamer@darktitletrue}
+
+\newif\ifbeamer@blackfont
+\beamer@blackfontfalse
+\DeclareOptionBeamer{blackfont}{\beamer@blackfonttrue}
+
+
+\newif\ifbeamer@framenumber
+\beamer@framenumberfalse
+\DeclareOptionBeamer{framenumber}{\beamer@framenumbertrue}
+
+\newif\ifbeamer@totalframenumber
+\beamer@totalframenumberfalse
+\DeclareOptionBeamer{totalframenumber}{\beamer@totalframenumbertrue}
+
+
+
+\ProcessOptionsBeamer
+% -------------------------------------------------------------------------
+
+\mode<presentation>
+
+\useinnertheme{SBA}
+\usefonttheme{SBA}
+\usecolortheme{SBA}
+\useoutertheme{SBA}
+
+%% Detection of aspect ratio
+%% Taken from https://tex.stackexchange.com/questions/123106/detect-aspect-ratio-in-beamer
+\makeatletter
+\newcommand\ifratio[3]{%
+\ifnum#1=169%
+    \ifdim\beamer@paperwidth=16.00cm\relax%
+        \ifdim\beamer@paperheight=9.00cm\relax%
+            #2%
+        \else%
+            #3%
+        \fi%
+    \else%
+        #3%
+    \fi%
+\else%
+    \ifnum#1=43%
+        \ifdim\beamer@paperwidth=12.80cm\relax%
+            \ifdim\beamer@paperheight=9.60cm\relax%
+                #2%
+            \else%
+                #3%
+            \fi%
+        \else%
+            #3%
+        \fi%
+    \fi%
+\fi%
+}
+\makeatother
+
+
+
+
+\makeatletter
+\def\makefrontpageimage{\ifbeamer@inframe\titlepage\else\frame[plain,noframenumbering]{\frontpageimage}\fi}
+
+\newcommand{\frontpageimage}{
+    %\begin{frame}[plain,noframenumbering]
+        \begin{tikzpicture}[remember picture, overlay]
+        \node[anchor=center] (sbafull) at (current page.center)
+        {\includegraphics[height=\paperheight,width=\paperwidth]{figures/sbaTitlePage}};
+    \end{tikzpicture}
+}
+\makeatother
+
+%custom \sectionpage for \section titles
+\setbeamertemplate{section page}
+{
+    \begin{frame}[plain,t,noframenumbering]
+    \begin{tikzpicture}[overlay, remember picture,anchor= current page.north west]
+%    \node[anchor=center] at (current page.center) {
+    \ifthenelse{ \boolean{beamer@nobg} \OR \boolean{beamer@titlebg} }
+    {%
+        \node[anchor=center] at ( 0.5\textwidth, -0.5\textheight) {
+        \begin{beamercolorbox}[center]{title}
+           \usebeamerfont{section title}\Huge\insertsection\par
+          \end{beamercolorbox}};
+    }
+    {%
+    \node[anchor=center] at ( \margin/2 + 0.5\textwidth, -0.5\textheight) {
+    \begin{beamercolorbox}[center]{title}
+       \usebeamerfont{section title}\Huge\insertsection\par
+      \end{beamercolorbox}};
+    }
+
+    \end{tikzpicture}
+
+%  \vspace{\fill}
+%  \begin{beamercolorbox}[sep=12pt,center]{part title}
+%  \usebeamerfont{section title}\Huge\insertsection\par
+%  \end{beamercolorbox}
+%  \vspace*{\fill}
+  \end{frame}
+}
+
+
+\mode
+<all>

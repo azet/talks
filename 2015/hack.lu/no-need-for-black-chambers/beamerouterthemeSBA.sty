@@ -1,0 +1,175 @@
+% --> REQUIRED PACKAGES <------------------------------------------------------
+\RequirePackage{calc}
+\usetikzlibrary{calc}
+\RequirePackage{ifthen}
+% --> END REQUIRED PACKAGES <--------------------------------------------------
+
+% --> DEFINE COMMANDS <------------------------------------------------------
+\newcommand*{\emailaddr}[1]{\gdef\@supervisor{#1}%
+}
+\newcommand*{\@emailaddr}{\texttt{\string\emailaddr} currently
+not set. Please fix this.}
+%\catcode`\_=11\relax
+%\newcommand\email[1]{\_email #1\q_nil}
+%\def\_email#1@#2\q_nil{%
+%  \href{mailto:#1@#2}{{\emailfont #1\emailampersat #2}}
+%}
+%\newcommand\emailfont{\sffamily}
+%\newcommand\emailampersat{{\color{red}\small@}}
+%\catcode`\_=8\relax    
+% --> END DEFINE COMMANDS <--------------------------------------------------
+
+
+\mode<presentation>
+
+
+% --> DEFINE LENGTHS <---------------------------------------------------------
+\newlength{\margin}
+\setlength{\margin}{0.9cm}
+\newlength{\logowidth}
+\setlength{\logowidth}{2.5cm}
+\newlength{\topheadingmargin}
+\setlength{\topheadingmargin}{0.3cm}
+\newlength\alllogospace
+\newlength\logospace
+\newlength\logoheight
+%\newlength{\partnerlogowidth}
+%\setlength{\partnerlogowidth}{11.5cm}
+% --> END DEFINE LENGTHS <-----------------------------------------------------
+
+
+% --> DEFINE IMAGES <----------------------------------------------------------
+%\pgfdeclareimage[width=\logowidth]{sbaLogo}{figures/sbaLogo}
+\pgfdeclareimage[width=\logowidth]{cometLogo}{figures/cometLogo}
+\pgfdeclareimage[height=\paperheight]{sbaBackground}{figures/sbaBackground_new}
+%\pgfdeclareimage[width=\partnerlogowidth,height=\partnerlogoheight]{partnerLogos}{figures/partnerLogos}
+% --> END DEFINE IMAGES <------------------------------------------------------
+
+
+
+% --> DEFINE PAGES <----------------------------------------------------------
+\def\makeendpage{%
+  \begin{frame}
+        
+  \end{frame}
+}
+% --> DEFINE PAGES <----------------------------------------------------------
+
+
+
+% --> HEADLINE <---------------------------------------------------------------
+\newcommand{\cometLogoPos}{\pgfpoint{\paperwidth-\margin}{-2cm}}
+\defbeamertemplate*{headline}{sba theme}%
+{%
+  \ifthenelse{ \NOT \boolean{beamer@nologo}}
+  {
+    \ifthenelse{\c@framenumber=1}
+  {
+%      \pgftext[right,bottom,at=\sbaLogoPos]{\pgfuseimage{sbaLogo}}%
+      \pgftext[right,bottom,at=\cometLogoPos]{\pgfuseimage{cometLogo}}%
+      \vskip\topheadingmargin%
+  }
+  {
+      \vskip\topheadingmargin%
+  }
+  }
+  {}
+ }
+% --> END HEADLINE <-----------------------------------------------------------
+
+
+
+% --> FRAMETITLE <-------------------------------------------------------------
+\defbeamertemplate*{frametitle}{sba theme}
+{%
+      \medskip%
+      %\begin{beamercolorbox}[right]{frame title}%
+      \begin{beamercolorbox}[left]{frame title}%
+        \insertframetitle\par%
+      \end{beamercolorbox}%
+}
+% --> END FRAMETITLE <---------------------------------------------------------
+
+
+
+% --> FOOTLINE <---------------------------------------------------------------
+
+\newcommand{\insertPartnerLogos}{
+\begin{tikzpicture}[remember picture, overlay]
+        \setlength{\alllogospace}{\linewidth}
+        \setlength{\logospace}{\alllogospace/6}
+        \setlength{\logoheight}{0.5cm}
+
+        \node[inner sep=0pt, anchor=east, align=left] (logoanchor) at (\paperwidth-\margin, \margin) {};
+        \node[inner sep=0pt, anchor=west] (fwflogo) at ($ (logoanchor.west) + (-1\logospace,0cm) $)
+        {\includegraphics[height=\logoheight]{figures/fwf_logo.eps}};
+        \node[inner sep=0pt, anchor=west] (cdglogo) at ($ (logoanchor.west) + (-2\logospace,0cm) $)
+        {\includegraphics[height=\logoheight]{figures/cdg_logo.eps}};
+        \node[inner sep=0pt, anchor=west] (zitlogo) at ($ (logoanchor.west) + (-3\logospace,0cm) $)
+        {\includegraphics[height=\logoheight]{figures/Wirtschaftsagentur_Logo_RGB.jpg}};
+% TODO eps logo       {\includegraphics[height=\logoheight]{figures/zit_logo.eps}};
+        \node[inner sep=0pt, anchor=west] (ffglogo) at ($ (logoanchor.west) + (-4\logospace,0cm) $)
+        {\includegraphics[height=\logoheight]{figures/ffg_logo.eps}};
+        \node[inner sep=0pt, anchor=west] (bmwfwlogo) at ($ (logoanchor.west) + (-5\logospace,0cm) $)
+        {\includegraphics[height=\logoheight]{figures/bmwfw_logo.eps}};
+        \node[inner sep=0pt, anchor=west] (bmvitlogo) at ($ (logoanchor.west) + (-6\logospace,0cm) $)
+        {\includegraphics[height=\logoheight]{figures/bmvit_logo.eps}};
+\end{tikzpicture}}
+
+
+\defbeamertemplate*{footline}{sba theme dark}
+{%
+    % Add Partner Logos on title page
+    \ifthenelse{\c@framenumber=1 \AND \NOT \boolean{beamer@nologo}}%
+    { 
+        \insertPartnerLogos
+    }%
+    {}%
+
+    % page number
+    \ifbeamer@framenumber%
+      \ifnum\c@framenumber=1\else
+        \pgftext[right,bottom,at=\pgfpoint{0.98\paperwidth}{0.02\paperwidth}]{%
+          \usebeamerfont{frame number in foot}%
+          \usebeamercolor[fg]{frame number in foot}\insertframenumber{}%
+          \ifbeamer@totalframenumber%
+            /\inserttotalframenumber%
+          \fi
+        }%
+      \fi
+    \fi%
+}%
+% --> END of FOOTLINE <--------------------------------------------------------
+
+
+% --> MARGINS <----------------------------------------------------------------
+% set left and right text margins
+\setbeamersize{text margin left=2\margin,%
+               text margin right=1.5\margin}
+\setlength\beamer@leftsidebar{2\margin}
+% --> END MARGINS <-----------------------------------------------------------
+
+
+% --> BACKGROUND <------------------------------------------------------------
+%\usebackgroundtemplate{
+%  \ifthenelse{\boolean{beamer@nobg}}%
+%  {\pgfuseimage{sbaBackground}}%
+%  {}%
+%}
+\defbeamertemplate*{background canvas}{sba theme}
+{%
+\ifthenelse{\c@framenumber>1 \AND \boolean{beamer@titlebg}}%
+{%
+}%
+{%   
+    \ifthenelse{\boolean{beamer@nobg}}
+    {%
+    }%
+    {\pgfuseimage{sbaBackground}%
+    }
+    }%
+}
+% --> END BACKGROUND <---------------------------------------------------------
+
+\mode
+<all>

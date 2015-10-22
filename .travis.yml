@@ -1,0 +1,7 @@
+# travis-ci for latexbeamer slides | Aaron Zauner <azet@azet.org>
+langauge: generic
+before_install:
+  - sudo apt-get update && sudo apt-get install --no-install-recommends texlive-fonts-recommended texlive-latex-extra texlive-fonts-extra dvipng texlive-latex-recommended pandoc latexmk
+  - tlmgr update --self; tlmgr install cryptocode bytefield
+script: rake
+after_script: rake clean
