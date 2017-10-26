@@ -12,7 +12,7 @@ pandoc-markdown:
 	pandoc content.md --slide-level 2 -t beamer -o contentgenerated.tex
 
 clean:
-	$(RM) $(foreach suf, ${TEX_SUFS}, $(TALK:.pdf=${suf})) *~
+	$(RM) $(foreach suf, ${TEX_SUFS}, $(TALK:.pdf=${suf})) *generated* *~
 	$(RM) -r auto
 
 clean-pdf:

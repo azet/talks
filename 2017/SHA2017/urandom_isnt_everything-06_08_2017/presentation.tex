@@ -1,0 +1,127 @@
+%% Author:  Aaron <azet@azet.org> Zauner
+%% License: https://creativecommons.org/licenses/by-nc-nd/4.0/
+
+%% theme and colorscheme
+\documentclass[hyperref={draft}, aspectratio=169, compress, 10pt]{beamer}
+\usecolortheme[dark,accent=white]{modifiedsolarized}
+\beamertemplatetransparentcovered
+\setbeamertemplate{navigation symbols}{}
+
+%% packages
+\usepackage[T1]{fontenc}
+\usepackage[sfdefault,thin]{roboto}
+\usepackage{textpos}
+\usepackage{tikz}
+\usepackage{mathtools}
+\usepackage{cryptocode}
+\usepackage{appendixnumberbeamer}
+\usepackage{microtype}
+\RequirePackage[english=usenglishmax]{hyphsubst}
+
+%% footer
+\setbeamertemplate{footline}[text line]{%
+  \parbox{\linewidth}{\vspace*{-15pt}
+          \insertdate \hfill \inserttitle \newline
+          \insertshortauthor \hfill \insertframenumber/\inserttotalframenumber
+         }}
+\setbeamertemplate{navigation symbols}{}
+
+%% title
+\title{Because "use urandom" isn't everything: a deep dive into CSPRNGs in Operating Systems \& Programming Languages}
+
+%% author and affilliation
+\author[Aaron Zauner]{Aaron Zauner\\
+        \textit{azet@azet.org}\\
+        \vspace{10px}
+        \includegraphics[height=65px,width=65px]{lambda}
+       }
+\institute{lambda.co.at:\\Highly-Available, Scalable \& Secure Distributed Systems}
+
+%% venue and date
+\date{SHA2017 - 06/08/2017}
+
+
+%% main
+\begin{document}
+
+% enables straight single quote
+\makeatletter
+\let \@sverbatim \@verbatim
+\def \@verbatim {\@sverbatim \verbatimplus}
+{\catcode`'=13 \gdef \verbatimplus{\catcode`'=13 \chardef '=13 }} 
+\makeatother
+
+% enables backticks in verbatim
+\makeatletter
+{\catcode`\`=13
+\xdef\@verbatim{\unexpanded\expandafter{\@verbatim}\chardef\noexpand`=18 }
+}
+\makeatother
+
+{
+\setbeamertemplate{footline}{}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+}
+\addtocounter{framenumber}{-1}
+
+{
+\setbeamertemplate{footline}{}
+
+\begin{frame}
+  \tableofcontents
+\end{frame}
+
+}
+\addtocounter{framenumber}{-1}
+
+
+\addtobeamertemplate{frametitle}{}{%
+  \begin{tikzpicture}[remember picture,overlay]
+    \node[anchor=north east,yshift=1pt] at (current page.north east) {
+      \includegraphics[height=30px]{lambda}
+    };
+  \end{tikzpicture}
+}
+
+
+\IfFileExists{contentgenerated.tex}{\input{"contentgenerated.tex"}}{\input{"content.tex"}}
+
+\begin{frame}
+  \begin{center}
+    \textsc{Thanks for your patience. Are there any questions?}
+    \vfill
+    Twitter:\\
+    \texttt{@a\_z\_e\_t}
+
+    \vfill
+    E-Mail:\\
+    \texttt{azet@azet.org}
+
+    \vfill
+    XMPP:\\
+    \texttt{azet@jabber.ccc.de}
+
+    \vfill
+    GitHub:\\
+    \url{https://github.com/azet}
+
+    \vfill
+    GPG Fingerprint:\\
+    \texttt{7CB6 197E 385A 02DC 15D8 E223 E4DB 6492 FDB9 B5D5}
+  \end{center}
+\end{frame}
+
+
+%% appendix
+%\appendix
+%\begin{frame}{Bonus Slides}
+%blablabla
+%\end{frame}
+
+
+\end{document}
+
