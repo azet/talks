@@ -151,7 +151,8 @@ over the locking cliff.
 * https://github.com/erlang/otp/blob/maint/lib/crypto/c_src/crypto.c
 
 ## Python
-### generally doing the correct thing:
+* generally doing the correct thing, unless catastrophically mishandled
+### see `https://github.com/python/cpython/blob/master/Lib/random.py#L772`
 ```
 class SystemRandom(Random):
     """Alternate random number generator using sources provided
