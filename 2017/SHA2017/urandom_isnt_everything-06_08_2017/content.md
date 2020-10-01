@@ -166,7 +166,7 @@ class SystemRandom(Random):
         return (int.from_bytes(_urandom(7), 'big') >> 3) * RECIP_BPF
 ```
 * cryptography.io is an excellent, safe library for development 
-* now warns if there're insecure values: https://bugs.python.org/issue27292
+* Bug in <3.6 didn't warns if os.urandom was procuding insecure output! fixed in: https://bugs.python.org/issue27292
 
 
 
@@ -177,7 +177,7 @@ class SystemRandom(Random):
 * https://wiki.openssl.org/index.php/Random_Numbers
 * Not even recommended by OpenSSL to use it as non-TLS CSPRNG
 
-## ` HAVEGE
+## HAVEGE
 * dangerous to use!
 * not maintained in more than 10yrs
 * no current contacts / security audits except by the original authors
