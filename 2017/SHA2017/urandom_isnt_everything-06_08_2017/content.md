@@ -150,8 +150,10 @@ over the locking cliff.
 * same as Ruby and Node.js
 * https://github.com/erlang/otp/blob/maint/lib/crypto/c_src/crypto.c
 
-## Python
-* generally doing the correct thing, unless catastrophically mishandled
+## Python3
+* cryptography.io is an excellent, safe, abstracted library for development if you need crypto primitives
+* Bug in Python 2.7, <3.6 didn't warn if `os.urandom` was producing insecure values (fixed): https://bugs.python.org/issue27292
+* generally doing the correct thing, unless catastrophically mishandled by the developer
 ### see `https://github.com/python/cpython/blob/master/Lib/random.py#L772`
 ```
 class SystemRandom(Random):
@@ -165,8 +167,6 @@ class SystemRandom(Random):
         """Get the next random number in the range [0.0, 1.0)."""
         return (int.from_bytes(_urandom(7), 'big') >> 3) * RECIP_BPF
 ```
-* cryptography.io is an excellent, safe library for development 
-* Bug in <3.6 didn't warns if os.urandom was procuding insecure output! fixed in: https://bugs.python.org/issue27292
 
 
 
