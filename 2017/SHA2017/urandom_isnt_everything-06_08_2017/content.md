@@ -1,27 +1,31 @@
 # What is a CSPRNG?
 ## Why do we need Random Numbers?
-* randomize stuff in your operating system / language
+* provides random data (or e.g. numbers) in your operating system, user-land programs and programming languages
    - `man rand`
    - Python: `os.urandom`
-* TLS session cookies
-* Key generation (e.g. RSA / Diffie-Hellman)
+### Real World Examples
+* VPN Tunnels (DTLS, IPSec, IKEv2)
+* Tele-conferencing: WebRTC, WebCrypto and WebSockets
+* HTTPS: TLS session cookies
+* Cryptographic Key generation (e.g. RSA, [Elliptic Curve] Diffie-Hellman)
 * TCP SYN cookies
 * Bash: `${RANDOM}` :)
 
-## CSPRNG i
+## CSPRNG I
 * "Cryptographically Secure Pseudo Random Number Generator"
-* aka "RNG", "Random number generator"..
+* commonly referred to as "RNG" aka "Random number generator"
 * Crypto nerds tend to call them "CSPRNGs" you may call them RNG or
   whatever, I don't care that much as long as it's secure!
 
-## CSPRNG ii
+## CSPRNG II
 * Widely implemented in OS kernels
      - Linux: `/dev/urandom`
-          1) manpage `man random` has been wrong for years
-          2) many myths about kernel entropy
-     - FreeBSD: `/dev/*random`
-         1) 
+          1) manpage `man 4 random` has been wrong for more than a decade
+          2) many myths about kernel entropy as a result of misleading manpage
+     - FreeBSD & OpenBSD: `/dev/*random`
+         1) BSDs have only one random char device, all naming-variations link to the same device (historically, implemented with care. OpenBSD among early adopters when it comes to upgrading security of OS/Kernel CSPRNG designs)
          2) Replace the RC4 algorithm for generating in-kernel secure random numbers with Chacha20. Keep the API, though, as that is what the other *BSD's have done. Use the boot-time entropy stash (if present) to bootstrap the in-kernel entropy source. (https://svnweb.freebsd.org/base?view=revision&revision=317015 - Sun Apr 16 09:11:02 2017 UTC)
+         3) OpenBSD always among the early adopters when it comes to improving Kernel/Userland security design & implementation. Ex.: CSPRNGs with arc4random(3). FreeBSD usually follows suit & may re-use code if OpenBSD's innovation brings real edge in security and/or gain of performance
      - Windows: `RtlGenRandom()`
 * ..and in programming languages
      - (i.e. Python `os.urandom`, PHP `rand()`,..)
@@ -44,8 +48,8 @@
 * `HAVEGE` won't save you! it can make things worse (See:
   https://blog.cr.yp.to/20140205-entropy.html)
 
-## Old Linux Kernel implementation `0.x>4.x`
-* mixing different pools of interrupts
+## Old Linux Kernel implementation `>2.x .. <4.2`
+* used mixing of different pools of interrupts and seemingly random events (jitter)
 * quite complicated to understand even for well versed C programmers
 * it worked without larger incidents - probably pure luck and
   researchers unable to read char device code
@@ -53,15 +57,8 @@
        - Blog Post: https://pthree.org/2014/07/21/the-linux-random-number-generator/
        - Academic: https://eprint.iacr.org/2012/251.pdf
 
-## curiosities in (`drivers/char/random.c`)
-### Splevin ARX
-* `fast_mix` implemented by George Splevin - never explained and no
-  crypto experience - homebrewed ARX
-* that code is still around - even in the upstream kernel git repo:
-* Code here: https://tinyurl.com/fastmix
 
-
-## Current implementation i
+## Current implementation I
 * after long discussions and advice by crytographers the old design in
   `random.c` was changed in 4.2
 * based on the old pools, AES-NI (if available - modern Intel/AMD CPUs
@@ -75,7 +72,7 @@ azet@nd01 ~ % dd if=/dev/urandom of=/dev/null bs=1M count=1024
 1073741824 bytes (1.1 GB) copied, 11.8289 s, 90.8 MB/s
 ```
 
-## Current implementation ii
+## Current implementation II
 * major work overhauling crypto-code in the kernel started with Linux
   4.2
 * Backtracking protection
@@ -84,7 +81,7 @@ azet@nd01 ~ % dd if=/dev/urandom of=/dev/null bs=1M count=1024
 * Doesn't track entropy anymore because the "CRNG" (terminology,..) is
   faster (https://marc.info/?l=linux-crypto-vger&m=146458684806389&w=2)
 
-## Current implementation iii
+## Current implementation III
 * `random: replace urandom pool with a CRNG`
   (https://marc.info/?l=linux-crypto-vger&m=146217043829396&w=2)
 * Nikos Mavrogiannopoulos
@@ -102,10 +99,9 @@ getrandom() because his network card works better with that version
 4. Mayhem as applications fail
 ```
 
-## Current implementation iv
+## Current implementation IV
 * `random: make /dev/urandom scalable for silly userspace programs`
   (https://marc.info/?l=linux-crypto-vger&m=146583311726544&w=2):
-
 ```
 On a system with a 4 socket (NUMA) system where a large number of
 application threads were all trying to read from /dev/urandom, this
@@ -115,11 +111,22 @@ PRNG, but let's try to help it from running, lemming-like, straight
 over the locking cliff.
 ```
 
-## Current implementation v
+## Current implementation V
 * Myths and lies in `man 4 random` finally corrected:
-  https://bugzilla.kernel.org/show_bug.cgi?id=71211&utm_content=buffer1d02b 
+  https://bugzilla.kernel.org/show_bug.cgi?id=71211&utm_content=buffer1d02b
     - this took years of convincing the original upstream authors etc.
     - had a huge impact on use of RNGs in programming languages etc.
+
+## Curiosities in (`drivers/char/random.c`)
+### Splevin ARX
+* `fast_mix` implemented by George Splevin - never explained and no
+  crypto experience - homebrewed ARX
+* that code is still around - even in the upstream kernel git repo:
+* Code here: https://tinyurl.com/fastmix
+
+# Scripting and Programming Languages
+* it's bad. quite bad. there's wide-spread negligence and missing deeper understanding for security critical topics in language core teams, as well as their implementations. the more of it's own "culture" and idols a language is sourrounded by, the worse it is trying to issue security relevant bug reports that need to be treated appropriately - "not invented here" or rather "never used here before" etc.
+* though not every programming language is as bad as you might think
 
 ## Language issues: Ruby
 * using OpenSSL RNG designed for fast TLS use, not general purpose
@@ -127,8 +134,8 @@ over the locking cliff.
   to switch to `/dev/urandom`
 * took more than a year but finally they implemented a similar design to
   `libsodium` (I've made a T-Shirt!)
-* `SecureRandom without OpenSSL (or compatible alternatives) is nonsense.`
-* `Please don't rude. `
+* *SecureRandom without OpenSSL (or compatible alternatives) is nonsense.*
+* *Please don't rude.*
 * Legendary bug: https://bugs.ruby-lang.org/issues/9569
 * Tony Arcieri (@bascule) wrote a wrapper for the time being:
   https://github.com/cryptosphere/sysrandom
@@ -143,9 +150,24 @@ over the locking cliff.
 * same as Ruby and Node.js
 * https://github.com/erlang/otp/blob/maint/lib/crypto/c_src/crypto.c
 
+## Python
+### generally doing the correct thing:
+```
+class SystemRandom(Random):
+    """Alternate random number generator using sources provided
+    by the operating system (such as /dev/urandom on Unix or
+    CryptGenRandom on Windows).
+     Not available on all systems (see os.urandom() for details).
+    """
 
-## Python imrprovement
-* warns if there're insecure values: https://bugs.python.org/issue27292
+    def random(self):
+        """Get the next random number in the range [0.0, 1.0)."""
+        return (int.from_bytes(_urandom(7), 'big') >> 3) * RECIP_BPF
+```
+* cryptography.io is an excellent, safe library for development 
+* now warns if there're insecure values: https://bugs.python.org/issue27292
+
+
 
 
 ## OpenSSL
@@ -161,5 +183,4 @@ over the locking cliff.
 * doesn't improve security!
 
 ## Parting words
-* ...
-
+* Ask me anything!
